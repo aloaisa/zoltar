@@ -11,6 +11,7 @@ const int STATUS_OFF = 6;
 
 const int BACKGROUND_LED_PIN = 2;
 const int EYES_LED_PIN = 3;
+const int POINT_TO_MOUTH_LED_PIN = 4;
 const int DETECT_COIN_PIN = 7;
 const int MUSIC_RX_PIN = 10;
 const int MUSIC_TX_PIN = 11;

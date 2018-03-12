@@ -9,8 +9,12 @@
  * On leds "Press the button"
  * Activate next status
  */
+void pointToMouthLedOn() {  
+  digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
+}
+
 int statusActivateGame(int status) { 
-  // Encender luces "Apunta a la boca"
+  pointToMouthLedOn();
   // Encender sonido campana
   // Activar los mandos
   
@@ -19,5 +23,8 @@ int statusActivateGame(int status) {
   // Desactivar los mandos
   // Encender luces "Pulsa botón liberar moneda"
   // Activo siguiente estado WAITING_RELEASE_COIN
+
+  return status;
 }
+
 

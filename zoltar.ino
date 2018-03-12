@@ -16,6 +16,7 @@ void setup() {
     pinMode(DETECT_COIN_PIN, INPUT);
     pinMode(BACKGROUND_LED_PIN, OUTPUT);
     pinMode(EYES_LED_PIN, OUTPUT);
+    pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
 
     status = STATUS_STAND_BY;
 } 

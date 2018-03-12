@@ -33,7 +33,7 @@ void eyesLedOn() {
 }
 
 void mouthMoveOn() {
-  
+  // TODO
 }
 
 int statusInit(int status) {

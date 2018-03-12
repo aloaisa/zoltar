@@ -6,10 +6,7 @@
  */
 // Input: Detectar moneda
 int statusStandBy(int status) {
-
-  // Esperando a que llegue la señal de la moneda
-  // Y cambio al siguiente estado INIT al detectarla
-
+  
   int inputCoin = digitalRead(DETECT_COIN_PIN);
   if (inputCoin == HIGH) {
     status = STATUS_INIT;
