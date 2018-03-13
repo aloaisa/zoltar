@@ -9,21 +9,44 @@
  * On leds "Press the button"
  * Activate next status
  */
+
+DFRobotDFPlayerMini soundDFPlayer;
+boolean isStatusActivateGame = false;
+SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+
+void initSoundConfiguration() {
+    soundSoftwareSerial.begin(BAUDS);
+    if (!soundDFPlayer.begin(soundSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
+      while(true);
+    }
+    
+    soundDFPlayer.volume(SOUND_VOLUME);
+}
+
 void pointToMouthLedOn() {  
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
+void playSound() {
+  soundDFPlayer.play(1);  //Play the first mp3
+}
+
 int statusActivateGame(int status) { 
-  pointToMouthLedOn();
-  // Encender sonido campana
-  // Activar los mandos
+  if (isStatusActivateGame == false) {
+    pointToMouthLedOn();
+    playSound();
+    // Activar los mandos
+    
+    //delay(10000);
   
-  //delay(10000);
-
-  // Desactivar los mandos
-  // Encender luces "Pulsa botón liberar moneda"
-  // Activo siguiente estado WAITING_RELEASE_COIN
-
+    // Desactivar los mandos
+    // Encender luces "Pulsa botón liberar moneda"
+    // Activo siguiente estado WAITING_RELEASE_COIN
+    
+    isStatusActivateGame = true;
+    status = STATUS_WAITING_RELEASE_COIN;
+  }
+  
   return status;
 }
 

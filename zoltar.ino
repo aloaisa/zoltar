@@ -12,6 +12,7 @@ void setup() {
     Serial.begin(BAUDS);
     
     initMusicConfiguration();
+    initSoundConfiguration();
     
     pinMode(DETECT_COIN_PIN, INPUT);
     pinMode(BACKGROUND_LED_PIN, OUTPUT);

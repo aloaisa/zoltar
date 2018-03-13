@@ -15,8 +15,10 @@ const int POINT_TO_MOUTH_LED_PIN = 4;
 const int DETECT_COIN_PIN = 7;
 const int MUSIC_RX_PIN = 10;
 const int MUSIC_TX_PIN = 11;
-
-const int MUSIC_VOLUME = 15; //Set volume value. From 0 to 30
+const int MUSIC_VOLUME = 20; //Set volume value. From 0 to 30
+const int SOUND_RX_PIN = 12;
+const int SOUND_TX_PIN = 13;
+const int SOUND_VOLUME = 10; //Set volume value. From 0 to 30
 
 const int DELAY_AFTER_STATUS_INIT = 5000; // en milisegundos
 

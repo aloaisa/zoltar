@@ -7,21 +7,21 @@
  * On mouth move - 1 digital input
  * And wait a defined time to start the game
  */
-DFRobotDFPlayerMini myDFPlayer;
+DFRobotDFPlayerMini musicDFPlayer;
 boolean isStatusInit = false;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
-void playMusic() {
-  myDFPlayer.play(1);  //Play the first mp3
-}
-
 void initMusicConfiguration() {
     musicSoftwareSerial.begin(BAUDS);
-    if (!myDFPlayer.begin(musicSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
+    if (!musicDFPlayer.begin(musicSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
       while(true);
     }
     
-    myDFPlayer.volume(MUSIC_VOLUME);
+    musicDFPlayer.volume(MUSIC_VOLUME);
+}
+
+void playMusic() {
+  musicDFPlayer.play(1);  //Play the first mp3
 }
 
 void backgroundLedOn() {  
