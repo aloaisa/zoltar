@@ -18,6 +18,7 @@ void setup() {
     pinMode(BACKGROUND_LED_PIN, OUTPUT);
     pinMode(EYES_LED_PIN, OUTPUT);
     pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
+    pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
 
     status = STATUS_STAND_BY;
 } 
@@ -37,6 +38,8 @@ void loop() {
       break;
 
     case STATUS_WAITING_RELEASE_COIN:
+      //unsigned long timeLoop = millis();
+      
       // Esperamos 10 segundos comprobando si se ha pulsado el botón de "liberar moneda"
       // Cuando se ha pulsado el botón o hayan pasado los 10 segundos, se libera la moneda.
       // Activo siguiente estado WIN_OR_LOST

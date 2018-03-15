@@ -13,6 +13,7 @@
 DFRobotDFPlayerMini soundDFPlayer;
 boolean isStatusActivateGame = false;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+unsigned long finishTime;
 
 void initSoundConfiguration() {
     soundSoftwareSerial.begin(BAUDS);
@@ -31,19 +32,34 @@ void playSound() {
   soundDFPlayer.play(1);  //Play the first mp3
 }
 
+void pushButtonCoinLedOn() {
+  digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH); // "Push coin button" Leds on
+}
+
+void activateControlls() {
+   // TODO
+}
+
+void desactivateControlls() {
+  // TODO
+}
+
 int statusActivateGame(int status) { 
   if (isStatusActivateGame == false) {
     pointToMouthLedOn();
     playSound();
-    // Activar los mandos
-    
-    //delay(10000);
-  
-    // Desactivar los mandos
-    // Encender luces "Pulsa botón liberar moneda"
-    // Activo siguiente estado WAITING_RELEASE_COIN
-    
+    activateControlls();
+
+    finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME;
     isStatusActivateGame = true;
+  }
+  
+  // TODO change 
+  // delay(10000);
+  if (finishTime < millis()) {
+    desactivateControlls();
+    pushButtonCoinLedOn();
+    
     status = STATUS_WAITING_RELEASE_COIN;
   }
   
