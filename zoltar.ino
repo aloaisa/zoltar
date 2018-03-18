@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
+#include "Servo.h"
+
 #include "Configuration.h"
 #include "StatusInit.h"
 #include "StatusStandBy.h"
@@ -12,6 +14,7 @@ void setup() {
     Serial.begin(BAUDS);
     
     initMusicConfiguration();
+    initControlls();
     initSoundConfiguration();
     
     pinMode(DETECT_COIN_PIN, INPUT);
@@ -19,6 +22,11 @@ void setup() {
     pinMode(EYES_LED_PIN, OUTPUT);
     pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
     pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
+    pinMode (CONTROLS_CLK_PIN,INPUT);
+    pinMode (CONTROLS_DT_PIN,INPUT);
+
+    servoMotor.attach(SERVO_CONTROL_X_PIN);
+    servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
 
     status = STATUS_STAND_BY;
 } 

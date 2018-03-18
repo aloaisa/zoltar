@@ -25,4 +25,11 @@ const int POINT_TO_MOUTH_WAIT_TIME = 20000;
 
 const int DELAY_AFTER_STATUS_INIT = 5000; // en milisegundos
 
+const int SERVO_CONTROL_X_PIN = 53;
+const int SERVO_CONTROL_X_STOP = 1500;
+const int SERVO_CONTROL_X_RIGHT = 1600;
+const int SERVO_CONTROL_X_LEFT = 1250;
+
+const int CONTROLS_DT_PIN = 22;
+const int CONTROLS_CLK_PIN = 23;
 

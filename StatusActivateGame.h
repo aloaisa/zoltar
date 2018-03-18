@@ -14,6 +14,10 @@ DFRobotDFPlayerMini soundDFPlayer;
 boolean isStatusActivateGame = false;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 unsigned long finishTime;
+Servo servoMotor;
+boolean controlsActive;
+int clkLastSignal, clkLastSignal2;
+
 
 void initSoundConfiguration() {
     soundSoftwareSerial.begin(BAUDS);
@@ -24,12 +28,18 @@ void initSoundConfiguration() {
     soundDFPlayer.volume(SOUND_VOLUME);
 }
 
+void initControlls() {
+  controlsActive = false;
+  clkLastSignal = digitalRead(CONTROLS_CLK_PIN);
+  clkLastSignal2 = clkLastSignal;
+}
+
 void pointToMouthLedOn() {  
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
 void playSound() {
-  soundDFPlayer.play(1);  //Play the first mp3
+  soundDFPlayer.play(1);
 }
 
 void pushButtonCoinLedOn() {
@@ -37,11 +47,36 @@ void pushButtonCoinLedOn() {
 }
 
 void activateControlls() {
-   // TODO
+   controlsActive = true;
 }
 
 void desactivateControlls() {
-  // TODO
+  controlsActive = false;
+  servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
+}
+
+void moveControls() {
+  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
+  int dtSignal = digitalRead(CONTROLS_DT_PIN);
+   
+   if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2) {
+    
+     if (dtSignal == HIGH) {
+      Serial.println("Derecha");
+       servoMotor.writeMicroseconds(SERVO_CONTROL_X_RIGHT);
+       
+     } else {
+       Serial.println("Izquierda");
+       servoMotor.writeMicroseconds(SERVO_CONTROL_X_LEFT);
+     }
+
+     delay(100);
+     servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
+
+     clkLastSignal2 = clkLastSignal;
+  }
+
+  clkLastSignal = clkSignal;
 }
 
 int statusActivateGame(int status) { 
@@ -54,13 +89,15 @@ int statusActivateGame(int status) {
     isStatusActivateGame = true;
   }
   
-  // TODO change 
-  // delay(10000);
   if (finishTime < millis()) {
-    desactivateControlls();
+    //desactivateControlls();
     pushButtonCoinLedOn();
     
-    status = STATUS_WAITING_RELEASE_COIN;
+    //status = STATUS_WAITING_RELEASE_COIN;
+  }
+
+  if (controlsActive == true) {
+    moveControls();
   }
   
   return status;
