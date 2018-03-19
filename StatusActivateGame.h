@@ -14,7 +14,6 @@ DFRobotDFPlayerMini soundDFPlayer;
 boolean isStatusActivateGame = false;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 unsigned long finishTime;
-Servo servoMotor;
 boolean controlsActive;
 int clkLastSignal, clkLastSignal2;
 
@@ -52,7 +51,7 @@ void activateControlls() {
 
 void desactivateControlls() {
   controlsActive = false;
-  servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
+  
 }
 
 void moveControls() {
@@ -62,16 +61,12 @@ void moveControls() {
    if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2) {
     
      if (dtSignal == HIGH) {
-      Serial.println("Derecha");
-       servoMotor.writeMicroseconds(SERVO_CONTROL_X_RIGHT);
+       Serial.println("Izquierda");
        
      } else {
-       Serial.println("Izquierda");
-       servoMotor.writeMicroseconds(SERVO_CONTROL_X_LEFT);
-     }
-
-     delay(100);
-     servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
+       Serial.println("Derecha");
+       
+     }     
 
      clkLastSignal2 = clkLastSignal;
   }
@@ -90,7 +85,7 @@ int statusActivateGame(int status) {
   }
   
   if (finishTime < millis()) {
-    //desactivateControlls();
+    desactivateControlls();
     pushButtonCoinLedOn();
     
     //status = STATUS_WAITING_RELEASE_COIN;

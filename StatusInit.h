@@ -10,6 +10,15 @@
 DFRobotDFPlayerMini musicDFPlayer;
 boolean isStatusInit = false;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
+boolean mouthMove;
+int motorHeadMoves [4][4] =
+{
+  {1, 1, 0, 0},
+  {0, 1, 1, 0},
+  {0, 0, 1, 1},
+  {1, 0, 0, 1}
+};
+
 
 void initMusicConfiguration() {
     musicSoftwareSerial.begin(BAUDS);
@@ -18,6 +27,8 @@ void initMusicConfiguration() {
     }
     
     musicDFPlayer.volume(MUSIC_VOLUME);
+    
+    mouthMove = false;
 }
 
 void playMusic() {
@@ -33,7 +44,21 @@ void eyesLedOn() {
 }
 
 void mouthMoveOn() {
-  // TODO
+  mouthMove = true;
+}
+
+boolean headMoveIsActive() {
+  return mouthMove;
+}
+
+void moveHead() {
+  for (int i = 0; i < 4; i++) {
+      digitalWrite(MOTOR_1_IN1_PIN, motorHeadMoves[i][0]);
+      digitalWrite(MOTOR_1_IN2_PIN, motorHeadMoves[i][1]);
+      digitalWrite(MOTOR_1_IN3_PIN, motorHeadMoves[i][2]);
+      digitalWrite(MOTOR_1_IN4_PIN, motorHeadMoves[i][3]);
+      delay(10);
+   }
 }
 
 int statusInit(int status) {

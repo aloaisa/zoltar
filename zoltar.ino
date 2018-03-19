@@ -1,8 +1,6 @@
 #include "Arduino.h"
 #include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
-#include "Servo.h"
-
 #include "Configuration.h"
 #include "StatusInit.h"
 #include "StatusStandBy.h"
@@ -22,12 +20,14 @@ void setup() {
     pinMode(EYES_LED_PIN, OUTPUT);
     pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
     pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
-    pinMode (CONTROLS_CLK_PIN,INPUT);
-    pinMode (CONTROLS_DT_PIN,INPUT);
+    pinMode(CONTROLS_CLK_PIN,INPUT);
+    pinMode(CONTROLS_DT_PIN,INPUT);
 
-    servoMotor.attach(SERVO_CONTROL_X_PIN);
-    servoMotor.writeMicroseconds(SERVO_CONTROL_X_STOP);
-
+    pinMode(MOTOR_1_IN1_PIN, OUTPUT);
+    pinMode(MOTOR_1_IN2_PIN, OUTPUT);
+    pinMode(MOTOR_1_IN3_PIN, OUTPUT);
+    pinMode(MOTOR_1_IN4_PIN, OUTPUT);
+  
     status = STATUS_STAND_BY;
 } 
 
@@ -90,8 +90,15 @@ void loop() {
       break;
 
   }
+
+  checkActiveThings();
 }
 
+void checkActiveThings() {
+  if (headMoveIsActive()) { 
+    moveHead();
+  }
+}
 
 void printStatus() {
   String statusText = "STAND_BY";
