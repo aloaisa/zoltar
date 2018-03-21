@@ -14,6 +14,7 @@ void setup() {
     initMusicConfiguration();
     initControlls();
     initSoundConfiguration();
+    initHeadMove();
     
     pinMode(DETECT_COIN_PIN, INPUT);
     pinMode(BACKGROUND_LED_PIN, OUTPUT);
@@ -27,12 +28,12 @@ void setup() {
     pinMode(MOTOR_1_IN2_PIN, OUTPUT);
     pinMode(MOTOR_1_IN3_PIN, OUTPUT);
     pinMode(MOTOR_1_IN4_PIN, OUTPUT);
-  
+
     status = STATUS_STAND_BY;
 } 
 
 void loop() {
-  
+    
   printStatus();
 
   switch (status) {

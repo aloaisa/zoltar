@@ -7,18 +7,15 @@
  * On mouth move - 1 digital input
  * And wait a defined time to start the game
  */
-DFRobotDFPlayerMini musicDFPlayer;
-boolean isStatusInit = false;
-SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
-boolean mouthMove;
-int motorHeadMoves [4][4] =
-{
-  {1, 1, 0, 0},
-  {0, 1, 1, 0},
-  {0, 0, 1, 1},
-  {1, 0, 0, 1}
-};
+#include <Stepper.h>
 
+boolean isStatusInit = false;
+
+Stepper stepperHeadMove(STEPS, MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, MOTOR_1_IN3_PIN, MOTOR_1_IN4_PIN);
+boolean mouthMove;
+
+DFRobotDFPlayerMini musicDFPlayer;
+SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
 void initMusicConfiguration() {
     musicSoftwareSerial.begin(BAUDS);
@@ -27,8 +24,11 @@ void initMusicConfiguration() {
     }
     
     musicDFPlayer.volume(MUSIC_VOLUME);
-    
-    mouthMove = false;
+}
+
+void initHeadMove() {
+  mouthMove = false;
+  stepperHeadMove.setSpeed(20); // 0 to 20
 }
 
 void playMusic() {
@@ -52,13 +52,7 @@ boolean headMoveIsActive() {
 }
 
 void moveHead() {
-  for (int i = 0; i < 4; i++) {
-      digitalWrite(MOTOR_1_IN1_PIN, motorHeadMoves[i][0]);
-      digitalWrite(MOTOR_1_IN2_PIN, motorHeadMoves[i][1]);
-      digitalWrite(MOTOR_1_IN3_PIN, motorHeadMoves[i][2]);
-      digitalWrite(MOTOR_1_IN4_PIN, motorHeadMoves[i][3]);
-      delay(10);
-   }
+  stepperHeadMove.step(10); // 1 to 10
 }
 
 int statusInit(int status) {
@@ -69,8 +63,6 @@ int statusInit(int status) {
     mouthMoveOn();
     
     isStatusInit = true;
-
-    delay(DELAY_AFTER_STATUS_INIT);
   
     status = STATUS_ACTIVATE_GAME;
   }

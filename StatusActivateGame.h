@@ -17,7 +17,6 @@ unsigned long finishTime;
 boolean controlsActive;
 int clkLastSignal, clkLastSignal2;
 
-
 void initSoundConfiguration() {
     soundSoftwareSerial.begin(BAUDS);
     if (!soundDFPlayer.begin(soundSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.

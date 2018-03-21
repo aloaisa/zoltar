@@ -33,3 +33,6 @@ const int MOTOR_1_IN2_PIN = 51;
 const int MOTOR_1_IN3_PIN = 52;
 const int MOTOR_1_IN4_PIN = 53;
 
+#define STEPS 512
+
+
