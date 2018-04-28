@@ -7,32 +7,23 @@
  * On mouth move - 1 digital input
  * And wait a defined time to start the game
  */
-#include <Stepper.h>
-
 boolean isStatusInit = false;
-
-Stepper stepperHeadMove(STEPS, MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, MOTOR_1_IN3_PIN, MOTOR_1_IN4_PIN);
 boolean mouthMove;
 
 DFRobotDFPlayerMini musicDFPlayer;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
-void initMusicConfiguration() {
+void statusInit_initMusicConfiguration() {
     musicSoftwareSerial.begin(BAUDS);
-    if (!musicDFPlayer.begin(musicSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
+    if (!musicDFPlayer.begin(musicSoftwareSerial)) {
       while(true);
     }
     
     musicDFPlayer.volume(MUSIC_VOLUME);
 }
 
-void initHeadMove() {
-  mouthMove = false;
-  stepperHeadMove.setSpeed(20); // 0 to 20
-}
-
 void playMusic() {
-  musicDFPlayer.play(1);  //Play the first mp3
+  musicDFPlayer.play(1);
 }
 
 void backgroundLedOn() {  
@@ -43,21 +34,26 @@ void eyesLedOn() {
   digitalWrite(EYES_LED_PIN, HIGH);
 }
 
+void statusInit_initHeadMove() {
+  mouthMove = false;  
+}
+
 void mouthMoveOn() {
   mouthMove = true;
 }
 
-boolean headMoveIsActive() {
+boolean statusInit_headMoveIsActive() {
   return mouthMove;
 }
 
-void moveHead() {
-  stepperHeadMove.step(10); // 1 to 10
+void statusInit_moveHead() {
+  // TODO
 }
 
 int statusInit(int status) {
   if (isStatusInit == false) {
-    playMusic();
+    // TODO Activate music
+    //playMusic();
     backgroundLedOn();
     eyesLedOn();
     mouthMoveOn();

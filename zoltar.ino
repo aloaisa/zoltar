@@ -5,35 +5,24 @@
 #include "StatusInit.h"
 #include "StatusStandBy.h"
 #include "StatusActivateGame.h"
+#include "StatusWaittingReleaseCoin.h"
 
 int status;
 
 void setup() {    
     Serial.begin(BAUDS);
     
-    initMusicConfiguration();
-    initControlls();
-    initSoundConfiguration();
-    initHeadMove();
-    
-    pinMode(DETECT_COIN_PIN, INPUT);
-    pinMode(BACKGROUND_LED_PIN, OUTPUT);
-    pinMode(EYES_LED_PIN, OUTPUT);
-    pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
-    pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
-    pinMode(CONTROLS_CLK_PIN,INPUT);
-    pinMode(CONTROLS_DT_PIN,INPUT);
+    initializeStatusInit();
+    initializeStatusActiveGame();
 
-    pinMode(MOTOR_1_IN1_PIN, OUTPUT);
-    pinMode(MOTOR_1_IN2_PIN, OUTPUT);
-    pinMode(MOTOR_1_IN3_PIN, OUTPUT);
-    pinMode(MOTOR_1_IN4_PIN, OUTPUT);
+    initializePins();
 
+    // Set initial status
     status = STATUS_STAND_BY;
 } 
 
 void loop() {
-    
+  
   printStatus();
 
   switch (status) {
@@ -47,15 +36,7 @@ void loop() {
       break;
 
     case STATUS_WAITING_RELEASE_COIN:
-      //unsigned long timeLoop = millis();
-      
-      // Esperamos 10 segundos comprobando si se ha pulsado el botón de "liberar moneda"
-      // Cuando se ha pulsado el botón o hayan pasado los 10 segundos, se libera la moneda.
-      // Activo siguiente estado WIN_OR_LOST
-      
-      // Botón Liberar moneda - 1 digital input
-      // Servo libera moneta depués del tiempo - 1 digital input
-
+      status = statusWaittingReleaseCoin(status);
       break;
 
     case STATUS_WIN_OR_LOST:
@@ -82,23 +63,48 @@ void loop() {
     case STATUS_OFF:
         // Esperar a que termine la música
         // desactivar musica y luces y movimiento. Todo
-        // Activar siguiente estado STAND_BY
+        // Activar siguiente estado STATUS_STAND_BY
 
       break;
 
-    default: //case "STAND_BY":
+    default: //case "STATUS_STAND_BY":
       status = statusStandBy(status);
       break;
 
   }
 
-  checkActiveThings();
+  checkContinuousActiveThings();
 }
 
-void checkActiveThings() {
-  if (headMoveIsActive()) { 
-    moveHead();
+void checkContinuousActiveThings() {
+  if (statusInit_headMoveIsActive()) { 
+    statusInit_moveHead();
   }
+}
+
+// Initialize Modules Methods
+void initializeStatusInit() {
+  // TODO Activate Music Initalize
+  //statusInit_initMusicConfiguration();
+  statusInit_initHeadMove();
+}
+
+void initializeStatusActiveGame() {
+    statusActivateGame_initControlls();
+    statusActivateGame_initSoundConfiguration();
+}
+
+void initializePins() {
+    pinMode(DETECT_COIN_PIN, INPUT);
+    pinMode(BACKGROUND_LED_PIN, OUTPUT);
+    pinMode(EYES_LED_PIN, OUTPUT);
+    pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
+    pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
+    
+    //pinMode(CONTROLS_DT_PIN,INPUT);
+    //pinMode(CONTROLS_CLK_PIN,INPUT);
+
+    pinMode(SOLENOID_PIN, OUTPUT);
 }
 
 void printStatus() {

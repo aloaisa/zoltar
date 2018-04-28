@@ -9,27 +9,35 @@
  * On leds "Press the button"
  * Activate next status
  */
+#include <Servo.h>
+int pos;
 
-DFRobotDFPlayerMini soundDFPlayer;
+//DFRobotDFPlayerMini soundDFPlayer;
+//SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+
 boolean isStatusActivateGame = false;
-SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 unsigned long finishTime;
 boolean controlsActive;
-int clkLastSignal, clkLastSignal2;
+//int clkLastSignal, clkLastSignal2;
 
-void initSoundConfiguration() {
-    soundSoftwareSerial.begin(BAUDS);
-    if (!soundDFPlayer.begin(soundSoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
-      while(true);
-    }
+void statusActivateGame_initSoundConfiguration() {
+    // soundSoftwareSerial.begin(BAUDS);
+    // if (!soundDFPlayer.begin(soundSoftwareSerial)) {
+    //   while(true);
+    // }
     
-    soundDFPlayer.volume(SOUND_VOLUME);
+    // soundDFPlayer.volume(SOUND_VOLUME);
 }
 
-void initControlls() {
+void statusActivateGame_initControlls() {
   controlsActive = false;
-  clkLastSignal = digitalRead(CONTROLS_CLK_PIN);
-  clkLastSignal2 = clkLastSignal;
+
+//  for (int initPoint = 158; initPoint >= 0; initPoint--) {
+//    servoMotor.write(initPoint);
+//    delay(15);
+//  }
+//  pos = 0;
+
 }
 
 void pointToMouthLedOn() {  
@@ -37,7 +45,7 @@ void pointToMouthLedOn() {
 }
 
 void playSound() {
-  soundDFPlayer.play(1);
+  // soundDFPlayer.play(1);
 }
 
 void pushButtonCoinLedOn() {
@@ -49,28 +57,43 @@ void activateControlls() {
 }
 
 void desactivateControlls() {
-  controlsActive = false;
-  
+  controlsActive = false;  
+}
+
+boolean isControlsActive() {
+  return controlsActive;
 }
 
 void moveControls() {
-  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
-  int dtSignal = digitalRead(CONTROLS_DT_PIN);
-   
-   if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2) {
-    
-     if (dtSignal == HIGH) {
-       Serial.println("Izquierda");
-       
-     } else {
-       Serial.println("Derecha");
-       
-     }     
-
-     clkLastSignal2 = clkLastSignal;
-  }
-
-  clkLastSignal = clkSignal;
+//  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
+//  int dtSignal = digitalRead(CONTROLS_DT_PIN);
+//
+//   int servoMove = servoMotor.read();
+//   if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2) {
+//    
+//     if (dtSignal == HIGH) {
+//        //Serial.println("Izquierda");
+//        pos = pos + 1;
+//        if (pos > 158) {
+//          pos = 158;
+//        }
+//     } else {       
+//        //Serial.println("Derecha");
+//        pos = pos - 1;
+//        if (pos < 0) {
+//          pos = 0;
+//        }        
+//     }
+//      
+//      
+//     Serial.println(pos);
+//     servoMotor.write(pos);
+//     delay(100);
+//
+//     clkLastSignal2 = clkLastSignal;
+//  }
+//
+//  clkLastSignal = clkSignal;
 }
 
 int statusActivateGame(int status) { 
@@ -87,10 +110,10 @@ int statusActivateGame(int status) {
     desactivateControlls();
     pushButtonCoinLedOn();
     
-    //status = STATUS_WAITING_RELEASE_COIN;
+    status = STATUS_WAITING_RELEASE_COIN;
   }
 
-  if (controlsActive == true) {
+  if (isControlsActive() == true) {
     moveControls();
   }
   
