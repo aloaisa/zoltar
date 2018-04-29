@@ -21,12 +21,12 @@ const int SOUND_RX_PIN = 12;
 const int SOUND_TX_PIN = 13;
 
 const int SOLENOID_PIN = 31;
-const int FREE_COIN_BUTTON_PIN = 32;
+const int FREE_COIN_BUTTON_PIN = 33;
 
 const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
 const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
 
-const int POINT_TO_MOUTH_WAIT_TIME = 20000;
+const int POINT_TO_MOUTH_WAIT_TIME = 3000; //20000;
 
 const int DELAY_AFTER_STATUS_INIT = 5000; // en milisegundos
 

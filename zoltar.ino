@@ -105,6 +105,7 @@ void initializePins() {
     //pinMode(CONTROLS_CLK_PIN,INPUT);
 
     pinMode(SOLENOID_PIN, OUTPUT);
+    pinMode(FREE_COIN_BUTTON_PIN, INPUT);
 }
 
 void printStatus() {
