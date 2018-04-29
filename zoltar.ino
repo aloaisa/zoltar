@@ -6,6 +6,7 @@
 #include "StatusStandBy.h"
 #include "StatusActivateGame.h"
 #include "StatusWaittingReleaseCoin.h"
+#include "StatusWinOrLost.h"
 
 int status;
 
@@ -40,10 +41,7 @@ void loop() {
       break;
 
     case STATUS_WIN_OR_LOST:
-      // Chequeamos los sensores de acierto o no
-      // Si ha acertado pasamos a "WIN" sino a "LOST"
-
-      // Sensores acierto o no - 2 digital inputs
+      status = statusWinOrLost(status);
       break;
 
     case STATUS_WIN:

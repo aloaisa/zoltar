@@ -6,7 +6,7 @@
  *  If the time pass and the button has not pressed, the coin it's free too.
  */
 boolean isStatusWaittingActivateGame = false;
-unsigned long waitingFinishTime;
+unsigned long waittingFinishTime;
 
 int freeCoin(int status) {
   digitalWrite(SOLENOID_PIN, HIGH);
@@ -32,7 +32,7 @@ int freeCoinIfGotIt(int status) {
     status = freeCoin(status);
   }
 
-  if (waitingFinishTime < millis()) {
+  if (waittingFinishTime < millis()) {
     status = freeCoin(status);
   }
 
@@ -42,7 +42,7 @@ int freeCoinIfGotIt(int status) {
 int statusWaittingReleaseCoin(int status) { 
   if (isStatusWaittingActivateGame == false) {
     
-    waitingFinishTime = millis() + FREE_COIN_TIME;
+    waittingFinishTime = millis() + FREE_COIN_TIME;
     isStatusWaittingActivateGame = true;
   } else {
   

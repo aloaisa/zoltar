@@ -22,6 +22,8 @@ const int SOUND_TX_PIN = 13;
 
 const int SOLENOID_PIN = 31;
 const int FREE_COIN_BUTTON_PIN = 33;
+const int SENSOR_WIN_PIN = 35;
+const int SENSOR_LOST_PIN = 37;
 
 const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
 const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
@@ -36,6 +38,7 @@ const int DELAY_AFTER_STATUS_INIT = 5000; // en milisegundos
 const int FREE_COIN_TIME = 10000;
 const int SELENOID_WAIT_TIME = 1000;
 
+const int WAIT_LOST_TIME = 5000;
 #define STEPS 512
 
 
