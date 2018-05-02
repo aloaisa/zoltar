@@ -1,7 +1,10 @@
-// Chequeamos los sensores de acierto o no
-// Si ha acertado pasamos a "WIN" sino a "LOST"
-
-// Sensores acierto o no - 2 digital inputs
+/**
+ * Status win or lost:
+ * Wait a time checking the swith win and lost.
+ * If sensor win ON then STATUS_WIN
+ * If sensor lost ON then STATUS_LOST
+ * If lostTime pass and no detect nothing then STATUS_LOST
+ */
 boolean isWinOrLostActivate = false;
 unsigned long lostTime;
 
@@ -36,7 +39,9 @@ int statusWinOrLost(int status) {
 	if (isWin() == true) {
 		return STATUS_WIN;
 	} else if (isLost() == true) {
-		return STATUS_LOST;
+		// TODO CHANGE TO LOST
+		//return STATUS_LOST;
+		return STATUS_WIN;
 	}
 
 	return status;

@@ -25,6 +25,18 @@ const int FREE_COIN_BUTTON_PIN = 33;
 const int SENSOR_WIN_PIN = 35;
 const int SENSOR_LOST_PIN = 37;
 
+const int MOTOR_STEP_VELOCITY_DELAY = 50;
+
+const int MOTOR_WIN_ENABLE_PIN = 39;
+const int MOTOR_WIN_STEP_PIN = 41;
+const int MOTOR_WIN_DIR_PIN = 43;
+const int SWITCH_WIN_CARD_MOTOR_PIN = 45;
+
+const int MOTOR_LOST_ENABLE_PIN = 46;
+const int MOTOR_LOST_STEP_PIN = 47;
+const int MOTOR_LOST_DIR_PIN = 48;
+const int SWITCH_LOST_CARD_MOTOR_PIN = 49;
+
 const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
 const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
 

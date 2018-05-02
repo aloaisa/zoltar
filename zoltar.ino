@@ -7,16 +7,21 @@
 #include "StatusActivateGame.h"
 #include "StatusWaittingReleaseCoin.h"
 #include "StatusWinOrLost.h"
+#include "StatusWin.h"
+#include "StatusLost.h"
 
 int status;
 
 void setup() {    
     Serial.begin(BAUDS);
     
-    initializeStatusInit();
-    initializeStatusActiveGame();
-
     initializePins();
+
+    initializeStatusInit();
+    initializeStatusActiveGame();    
+
+    initStatusWin();
+    initStatusLost();
 
     // Set initial status
     status = STATUS_STAND_BY;
@@ -45,17 +50,11 @@ void loop() {
       break;
 
     case STATUS_WIN:
-        // Sacar tarjeta Acierto
-        // Activar siguiente estado OFF
-
-        // Servo tarjetero 1 - 1 digital input
+        status = statusWin(status);
       break;
 
     case STATUS_LOST:
-        // Sacar tarjeta de la tienda
-        // Activar siguiente estado OFF
-
-        // Servo tarjetero 2 - 1 digital input
+        status = statusLost(status);
       break;
 
     case STATUS_OFF:
@@ -104,6 +103,12 @@ void initializePins() {
 
     pinMode(SOLENOID_PIN, OUTPUT);
     pinMode(FREE_COIN_BUTTON_PIN, INPUT);
+    
+    pinMode(MOTOR_WIN_ENABLE_PIN, OUTPUT);
+    pinMode(MOTOR_WIN_STEP_PIN, OUTPUT);
+    pinMode(MOTOR_WIN_DIR_PIN, OUTPUT);
+    pinMode(SWITCH_WIN_CARD_MOTOR_PIN, INPUT);
+
 }
 
 void printStatus() {
