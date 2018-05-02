@@ -32,10 +32,11 @@ const int MOTOR_WIN_STEP_PIN = 41;
 const int MOTOR_WIN_DIR_PIN = 43;
 const int SWITCH_WIN_CARD_MOTOR_PIN = 45;
 
-const int MOTOR_LOST_ENABLE_PIN = 46;
-const int MOTOR_LOST_STEP_PIN = 47;
-const int MOTOR_LOST_DIR_PIN = 48;
-const int SWITCH_LOST_CARD_MOTOR_PIN = 49;
+const int MOTOR_LOST_ENABLE_PIN = 38;
+const int MOTOR_LOST_STEP_PIN = 40;
+const int MOTOR_LOST_DIR_PIN = 42;
+const int SWITCH_LOST_CARD_MOTOR_PIN = 44;
+
 
 const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
 const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
