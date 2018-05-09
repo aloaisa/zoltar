@@ -3,8 +3,8 @@
 Servo servoMotor;
 int servoGrados;
 
-int pinA = 3;  // Connected to CLK on KY-040
- int pinB = 4;  // Connected to DT on KY-040
+int pinA = 32;  // Connected to CLK on KY-040
+ int pinB = 33;  // Connected to DT on KY-040
  int encoderPosCount = 0; 
  int pinALast;  
  int aVal;

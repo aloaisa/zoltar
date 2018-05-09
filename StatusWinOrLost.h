@@ -5,8 +5,12 @@
  * If sensor lost ON then STATUS_LOST
  * If lostTime pass and no detect nothing then STATUS_LOST
  */
-boolean isWinOrLostActivate = false;
+boolean isWinOrLostActivate;
 unsigned long lostTime;
+
+void statusWinOrLost_Reset() {
+	isWinOrLostActivate = false;
+}
 
 boolean isWin() {
 	int input = digitalRead(SENSOR_WIN_PIN);
@@ -39,9 +43,7 @@ int statusWinOrLost(int status) {
 	if (isWin() == true) {
 		return STATUS_WIN;
 	} else if (isLost() == true) {
-		// TODO CHANGE TO LOST
-		//return STATUS_LOST;
-		return STATUS_WIN;
+		return STATUS_LOST;
 	}
 
 	return status;

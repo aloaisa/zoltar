@@ -12,9 +12,9 @@
 //    http://shop.mchobby.be/product.php?id_product=349
 //
 
-#define pinEnable 50 // Activation du driver/pilote
-#define pinStep    40 // Signal de PAS (avancement)
-#define pinDir     41 // Direction 
+#define pinEnable 39 // Activation du driver/pilote
+#define pinStep    41 // Signal de PAS (avancement)
+#define pinDir     43 // Direction 
 
 
 void setup(){

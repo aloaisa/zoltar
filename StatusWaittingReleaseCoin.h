@@ -5,7 +5,7 @@
  *  the coin. Continue with the next status.
  *  If the time pass and the button has not pressed, the coin it's free too.
  */
-boolean isStatusWaittingActivateGame = false;
+boolean isStatusWaittingActivateGame;
 unsigned long waittingFinishTime;
 
 int freeCoin(int status) {
@@ -16,6 +16,10 @@ int freeCoin(int status) {
   status = STATUS_WIN_OR_LOST;
 
   return status;
+}
+
+void statusWaittingReleaseCoin_Reset() {
+  isStatusWaittingActivateGame = false;
 }
     
 boolean isButtonPressed() {

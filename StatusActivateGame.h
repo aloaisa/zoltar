@@ -12,10 +12,10 @@
 #include <Servo.h>
 int pos;
 
-//DFRobotDFPlayerMini soundDFPlayer;
-//SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+DFRobotDFPlayerMini soundDFPlayer;
+SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
-boolean isStatusActivateGame = false;
+boolean isStatusActivateGame;
 unsigned long finishTime;
 boolean controlsActive;
 //int clkLastSignal, clkLastSignal2;
@@ -27,17 +27,6 @@ void statusActivateGame_initSoundConfiguration() {
     // }
     
     // soundDFPlayer.volume(SOUND_VOLUME);
-}
-
-void statusActivateGame_initControlls() {
-  controlsActive = false;
-
-//  for (int initPoint = 158; initPoint >= 0; initPoint--) {
-//    servoMotor.write(initPoint);
-//    delay(15);
-//  }
-//  pos = 0;
-
 }
 
 void pointToMouthLedOn() {  
@@ -95,6 +84,19 @@ void moveControls() {
 //
 //  clkLastSignal = clkSignal;
 }
+
+void statusActivateGame_Reset() {
+  isStatusActivateGame = false;
+  desactivateControlls();
+
+
+//  for (int initPoint = 158; initPoint >= 0; initPoint--) {
+//    servoMotor.write(initPoint);
+//    delay(15);
+//  }
+//  pos = 0;
+} 
+
 
 int statusActivateGame(int status) { 
   if (isStatusActivateGame == false) {

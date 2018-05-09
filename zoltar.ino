@@ -18,7 +18,9 @@ void setup() {
     initializePins();
 
     initializeStatusInit();
-    initializeStatusActiveGame();    
+    initializeStatusActiveGame();
+    initializeStatusWaittingReleaseCoin();
+    initializeStatusWinOrLost();
 
     initStatusWin();
     initStatusLost();
@@ -58,10 +60,7 @@ void loop() {
       break;
 
     case STATUS_OFF:
-        // Esperar a que termine la música
-        // desactivar musica y luces y movimiento. Todo
-        // Activar siguiente estado STATUS_STAND_BY
-
+        status = statusOff(status);
       break;
 
     default: //case "STATUS_STAND_BY":
@@ -81,14 +80,21 @@ void checkContinuousActiveThings() {
 
 // Initialize Modules Methods
 void initializeStatusInit() {
-  // TODO Activate Music Initalize
-  //statusInit_initMusicConfiguration();
+  statusInit_initMusicConfiguration();
   statusInit_initHeadMove();
 }
 
 void initializeStatusActiveGame() {
-    statusActivateGame_initControlls();
+    statusActivateGame_Reset();
     statusActivateGame_initSoundConfiguration();
+}
+
+void initializeStatusWaittingReleaseCoin() {
+  statusWaittingReleaseCoin_Reset();
+}
+
+void initializeStatusWinOrLost() {
+  statusWinOrLost_Reset();
 }
 
 void initializePins() {
@@ -98,8 +104,10 @@ void initializePins() {
     pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
     pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
     
-    //pinMode(CONTROLS_DT_PIN,INPUT);
-    //pinMode(CONTROLS_CLK_PIN,INPUT);
+    pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT);
+    pinMode(CONTROLS_VERTICAL_CLK_PIN,INPUT);
+    pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT);
+    pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT);
 
     pinMode(SOLENOID_PIN, OUTPUT);
     pinMode(FREE_COIN_BUTTON_PIN, INPUT);
@@ -109,6 +117,19 @@ void initializePins() {
     pinMode(MOTOR_WIN_DIR_PIN, OUTPUT);
     pinMode(SWITCH_WIN_CARD_MOTOR_PIN, INPUT);
 
+}
+
+int statusOff(int status) {
+  // TODO
+  // Esperar a que termine la música
+  
+  statusInit_Reset();
+  statusActivateGame_Reset();
+  statusWaittingReleaseCoin_Reset();
+  statusWinOrLost_Reset();
+
+  status = STATUS_STAND_BY;
+  return status;
 }
 
 void printStatus() {

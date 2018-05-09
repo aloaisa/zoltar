@@ -3,60 +3,66 @@
 Servo servoMotor;
 int servoGrados;
 
-int pinA = 3;  // Connected to CLK on KY-040
- int pinB = 4;  // Connected to DT on KY-040
- int encoderPosCount = 0; 
- int pinALast;  
- int aVal;
- boolean bCW;
+int pinA = 22;  // Connected to CLK on KY-040
+int pinB = 23;  // Connected to DT on KY-040
+int servoPin = 9;
+int encoderPosCount = 0; 
+int last;  
+int actual;
 
+int DOWN_LIMIT = 0;
+int UP_LIMIT = 180;
+int INCREMENT = 1;
 
- void setup() {
+void setup() {
    servoGrados = 90;
   
-   pinMode (pinA,INPUT);
-   pinMode (pinB,INPUT);
+   pinMode(pinA,INPUT);
+   pinMode(pinB,INPUT);
 
-   servoMotor.attach(9);
+   servoMotor.attach(servoPin);
    servoMotor.write(servoGrados);
+   delay(1000);
 
    /* Read Pin A
    Whatever state it's in will reflect the last position   
    */
-   pinALast = digitalRead(pinA);   
+   actual = digitalRead(pinA);   
    Serial.begin (9600);
- } 
+} 
 
- void loop() { 
-   aVal = digitalRead(pinA);
-   if (aVal != pinALast){ // Means the knob is rotating
-     // if the knob is rotating, we need to determine direction
-     // We do that by reading pin B.
-     if (digitalRead(pinB) != aVal) {  // Means pin A Changed first - We're Rotating Clockwise
+void loop() { 
+   actual = digitalRead(pinA);
+   
+   if (actual != last) {
+     
+     if (digitalRead(pinB) != actual) {
        encoderPosCount ++;
-       bCW = true;
-     } else {// Otherwise B changed first and we're moving CCW
-       bCW = false;
+       
+       //Serial.println ("sentido antihorario");
+       servoGrados = servoGrados + INCREMENT;
+       
+       if (servoGrados > UP_LIMIT) {
+        servoGrados = UP_LIMIT;
+       }
+       
+     } else {
        encoderPosCount--;
-     }
-     Serial.print ("Rotated: ");
-     if (bCW){
-       Serial.println ("sentido antihorario");
-       servoGrados = servoGrados + 5;
-       if (servoGrados > 135) {
-        servoGrados = 135;
+
+       //Serial.println("sentido horario");
+       servoGrados = servoGrados - INCREMENT;
+       
+       if (servoGrados < DOWN_LIMIT) {
+        servoGrados = DOWN_LIMIT;
        }
-     }else{
-       Serial.println("sentido horario");
-       servoGrados = servoGrados - 5;
-       if (servoGrados < 45) {
-        servoGrados = 45;
-       }
-     }
+     }     
+     
      servoMotor.write(servoGrados);
+
      Serial.print("Encoder Position: ");
      Serial.println(encoderPosCount);
-     
-   } 
-   pinALast = aVal;
- } 
+     delay(10);
+   }
+   
+   last = actual;
+}
