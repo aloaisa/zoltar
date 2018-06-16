@@ -12,9 +12,9 @@
 //    http://shop.mchobby.be/product.php?id_product=349
 //
 
-#define pinEnable 39 // Activation du driver/pilote
-#define pinStep    41 // Signal de PAS (avancement)
-#define pinDir     43 // Direction 
+#define pinEnable 8 // Activation du driver/pilote
+#define pinStep    2 // Signal de PAS (avancement)
+#define pinDir     5 // Direction 
 
 
 void setup(){
@@ -29,29 +29,29 @@ void setup(){
 void loop(){
   int i = 0;
   
-  digitalWrite( pinDir   , HIGH); // Direction avant
-  digitalWrite( pinStep  , LOW);  // Initialisation de la broche step
+  //digitalWrite( pinDir   , HIGH); // Direction avant
+  //digitalWrite( pinStep  , LOW);  // Initialisation de la broche step
   
   // Avance de 200 pas
-  for( i=0; i<200; i++){
+  //for( i=0; i<200; i++){
     Serial.println( i );
     digitalWrite( pinStep, HIGH );
     delay( 10 );
     digitalWrite( pinStep, LOW );
     delay( 10 );
-  } 
+  //} 
   
-  // Changer de direction
-  digitalWrite( pinDir   , LOW); // Direction avant
-  
-  // Refaire 200 pas dans l'autre sens
-  for( i=0; i<200; i++){
-    Serial.println( i );
-    digitalWrite( pinStep, HIGH );
-    delay( 1 );
-    digitalWrite( pinStep, LOW );
-    delay( 1 );
-  } 
-  
-  delay( 5000 );
+//  // Changer de direction
+//  digitalWrite( pinDir   , LOW); // Direction avant
+//  
+//  // Refaire 200 pas dans l'autre sens
+//  for( i=0; i<200; i++){
+//    Serial.println( i );
+//    digitalWrite( pinStep, HIGH );
+//    delay( 1 );
+//    digitalWrite( pinStep, LOW );
+//    delay( 1 );
+//  } 
+//  
+ // delay( 5000 );
 }

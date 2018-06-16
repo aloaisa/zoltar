@@ -2,8 +2,8 @@
 
 Servo servoMotor;
 
-int pinA = 3;  // Connected to CLK on KY-040
-int pinB = 4;  // Connected to DT on KY-040
+int pinA = 23;  // Connected to CLK on KY-040
+int pinB = 22;  // Connected to DT on KY-040
 int pinALast, pinBLast;
 boolean bCW;
 

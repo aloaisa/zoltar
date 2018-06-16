@@ -11,11 +11,11 @@ int last;
 int actual;
 
 int DOWN_LIMIT = 0;
-int UP_LIMIT = 180;
+int UP_LIMIT = 55; // 135
 int INCREMENT = 1;
 
 void setup() {
-   servoGrados = 90;
+   servoGrados = 0;
   
    pinMode(pinA,INPUT);
    pinMode(pinB,INPUT);
@@ -27,8 +27,8 @@ void setup() {
    /* Read Pin A
    Whatever state it's in will reflect the last position   
    */
-   actual = digitalRead(pinA);   
-   Serial.begin (9600);
+   actual = digitalRead(pinA);
+   Serial.begin(9600);
 } 
 
 void loop() { 
