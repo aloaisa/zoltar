@@ -13,72 +13,85 @@ boolean mouthMove;
 DFRobotDFPlayerMini musicDFPlayer;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
-void statusInit_initMusicConfiguration() {
-    /*
-    musicSoftwareSerial.begin(BAUDS);
-    if (!musicDFPlayer.begin(musicSoftwareSerial)) {
-      while(true);
-    }
-    
-    musicDFPlayer.volume(MUSIC_VOLUME);
-    */
+Servo headServoMotor;
+
+void statusInit_initialize()
+{
+  initMusicConfiguration();
+  initHeadMove();
 }
 
-void playMusic() {
-  //musicDFPlayer.play(1);
+void initMusicConfiguration()
+{
+  musicSoftwareSerial.begin(BAUDS);
+  if (!musicDFPlayer.begin(musicSoftwareSerial))
+  {
+    while (true)
+      ;
+  }
+
+  musicDFPlayer.volume(MUSIC_VOLUME);
 }
 
-void backgroundLedOn() {  
-  digitalWrite(BACKGROUND_LED_PIN, HIGH);
+void playMusic()
+{
+  musicDFPlayer.play(1);
 }
 
-void backgroundLedOff() {  
-  digitalWrite(BACKGROUND_LED_PIN, LOW);
-}
-
-void eyesLedOn() {
+void eyesLedOn()
+{
   digitalWrite(EYES_LED_PIN, HIGH);
 }
 
-void eyesLedOff() {
+void eyesLedOff()
+{
   digitalWrite(EYES_LED_PIN, LOW);
 }
 
-void statusInit_initHeadMove() {
+void initHeadMove()
+{
+  headServoMotor.attach(HEAD_SERVO_PIN);
+  headServoMotor.write(0);
+  delay(1000);
+
   mouthMove = false;
 }
 
-void mouthMoveOn() {
+void mouthMoveOn()
+{
   mouthMove = true;
 }
 
-boolean statusInit_headMoveIsActive() {
+boolean statusInit_headMoveIsActive()
+{
   return mouthMove;
 }
 
-void statusInit_moveHead() {
-  // TODO
+void statusInit_moveHead()
+{
+  // TODO Iniciar Servo Cabeza
+  // Mover servo arriba y abajo continuo
 }
 
-void statusInit_Reset() {
+void statusInit_Reset()
+{
   isStatusInit = false;
-  statusInit_initHeadMove();
+  initHeadMove();
   eyesLedOff();
-  backgroundLedOff();
 }
 
-int statusInit(int status) {
-  if (isStatusInit == false) {
+int statusInit(int status)
+{
+  if (isStatusInit == false)
+  {
     playMusic();
-    backgroundLedOn();
     eyesLedOn();
     mouthMoveOn();
-    
+
     isStatusInit = true;
-  
+
     status = STATUS_ACTIVATE_GAME;
   }
 
   return status;
 }
-

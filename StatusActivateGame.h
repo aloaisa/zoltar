@@ -9,117 +9,180 @@
  * On leds "Press the button"
  * Activate next status
  */
-#include <Servo.h>
-int pos;
+Servo verticalServo;
+Servo horizontalServo;
+
+int verticalPos;
+int horizontalPos;
 
 DFRobotDFPlayerMini soundDFPlayer;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
-boolean isStatusActivateGame;
+boolean isStatusActivateGame = false;
 unsigned long finishTime;
 boolean controlsActive;
-//int clkLastSignal, clkLastSignal2;
+int clkLastSignal, clkLastSignal2;
 
-void statusActivateGame_initSoundConfiguration() {
-    // soundSoftwareSerial.begin(BAUDS);
-    // if (!soundDFPlayer.begin(soundSoftwareSerial)) {
-    //   while(true);
-    // }
-    
-    // soundDFPlayer.volume(SOUND_VOLUME);
+void statusActivateGame_init()
+{
+  initSoundConfiguration();
+  initServoConfiguration();
 }
 
-void pointToMouthLedOn() {  
+void initSoundConfiguration()
+{
+  soundSoftwareSerial.begin(BAUDS);
+  if (!soundDFPlayer.begin(soundSoftwareSerial))
+  {
+    while (true)
+      ;
+  }
+
+  soundDFPlayer.volume(SOUND_VOLUME);
+}
+
+void initServoConfiguration()
+{
+  verticalServo.attach(SERVO_VERTICAL_PIN);
+  verticalServo.write(0);
+  delay(1000);
+
+  horizontalServo.attach(SERVO_HORIZONTAL_PIN);
+  horizontalServo.write(0);
+  delay(1000);
+
+  /* Read Pin A and B
+   Whatever state it's in will reflect the last position   
+   */
+  verticalPos = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
+  horizontalPos = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
+}
+
+void pointToMouthLedOn()
+{
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
-void playSound() {
-  // soundDFPlayer.play(1);
+makeAWishLedOn()
+{
+  digitalWrite(MAKE_WISH_LED_PIN, HIGH);
 }
 
-void pushButtonCoinLedOn() {
-  digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH); // "Push coin button" Leds on
+makeAWishLedOff()
+{
+  digitalWrite(MAKE_WISH_LED_PIN, HIGH);
 }
 
-void activateControlls() {
-   controlsActive = true;
+void playSound()
+{
+  soundDFPlayer.play(1);
 }
 
-void desactivateControlls() {
-  controlsActive = false;  
+void pushButtonCoinLedOn()
+{
+  digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH);
 }
 
-boolean isControlsActive() {
+void activateControlls()
+{
+  controlsActive = true;
+}
+
+void desactivateControlls()
+{
+  controlsActive = false;
+}
+
+boolean isControlsActive()
+{
   return controlsActive;
 }
 
-void moveControls() {
-//  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
-//  int dtSignal = digitalRead(CONTROLS_DT_PIN);
-//
-//   int servoMove = servoMotor.read();
-//   if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2) {
-//    
-//     if (dtSignal == HIGH) {
-//        //Serial.println("Izquierda");
-//        pos = pos + 1;
-//        if (pos > 158) {
-//          pos = 158;
-//        }
-//     } else {       
-//        //Serial.println("Derecha");
-//        pos = pos - 1;
-//        if (pos < 0) {
-//          pos = 0;
-//        }        
-//     }
-//      
-//      
-//     Serial.println(pos);
-//     servoMotor.write(pos);
-//     delay(100);
-//
-//     clkLastSignal2 = clkLastSignal;
-//  }
-//
-//  clkLastSignal = clkSignal;
+void moveControls()
+{
+  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
+  int dtSignal = digitalRead(CONTROLS_DT_PIN);
+
+  int servoMove = servoMotor.read();
+  if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2)
+  {
+
+    if (dtSignal == HIGH)
+    {
+      //Serial.println("Izquierda");
+      pos = pos + 1;
+      if (pos > 158)
+      {
+        pos = 158;
+      }
+    }
+    else
+    {
+      //Serial.println("Derecha");
+      pos = pos - 1;
+      if (pos < 0)
+      {
+        pos = 0;
+      }
+    }
+
+    Serial.println(pos);
+    servoMotor.write(pos);
+    delay(100);
+
+    clkLastSignal2 = clkLastSignal;
+  }
+
+  clkLastSignal = clkSignal;
 }
 
-void statusActivateGame_Reset() {
+void statusActivateGame_Reset()
+{
   isStatusActivateGame = false;
   desactivateControlls();
 
+  // Move servos to 0 position
+  for (int initPoint = 158; initPoint >= 0; initPoint--)
+  {
+    verticalServo.write(initPoint);
+    horizontalServo.write(initPoint);
+    delay(15);
+  }
+  verticalPos = 0;
+  horizontalPos = 0;
+}
 
-//  for (int initPoint = 158; initPoint >= 0; initPoint--) {
-//    servoMotor.write(initPoint);
-//    delay(15);
-//  }
-//  pos = 0;
-} 
-
-
-int statusActivateGame(int status) { 
-  if (isStatusActivateGame == false) {
-    pointToMouthLedOn();
+int statusActivateGame(int status)
+{
+  if (isStatusActivateGame == false)
+  {
     playSound();
+    pointToMouthLedOn();
     activateControlls();
 
-    finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME;
+    finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME + MAKE_WITH_WAIT_TIME;
     isStatusActivateGame = true;
   }
-  
-  if (finishTime < millis()) {
+
+  // Se enciende pide un deseo, pero puedes seguir moviendolo hasta otros
+  // Activa los leds de pide un deseo.
+  if ((finishTime - MAKE_WITH_WAIT_TIME) < millis())
+  {
+    makeAWishLedOn();
+  }
+
+  if (finishTime < millis())
+  {
     desactivateControlls();
     pushButtonCoinLedOn();
-    
+
     status = STATUS_WAITING_RELEASE_COIN;
   }
 
-  if (isControlsActive() == true) {
+  if (isControlsActive() == true)
+  {
     moveControls();
   }
-  
+
   return status;
 }
-
-
