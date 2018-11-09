@@ -23,12 +23,6 @@ unsigned long finishTime;
 boolean controlsActive;
 int clkLastSignal, clkLastSignal2;
 
-void statusActivateGame_init()
-{
-  initSoundConfiguration();
-  initServoConfiguration();
-}
-
 void initSoundConfiguration()
 {
   soundSoftwareSerial.begin(BAUDS);
@@ -58,17 +52,25 @@ void initServoConfiguration()
   horizontalPos = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
 }
 
+void statusActivateGame_init()
+{
+  // TODO Does not works!
+  // initSoundConfiguration();
+
+  initServoConfiguration();
+}
+
 void pointToMouthLedOn()
 {
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
-makeAWishLedOn()
+void makeAWishLedOn()
 {
   digitalWrite(MAKE_WISH_LED_PIN, HIGH);
 }
 
-makeAWishLedOff()
+void makeAWishLedOff()
 {
   digitalWrite(MAKE_WISH_LED_PIN, HIGH);
 }
@@ -100,34 +102,34 @@ boolean isControlsActive()
 
 void moveControls()
 {
-  int clkSignal = digitalRead(CONTROLS_CLK_PIN);
-  int dtSignal = digitalRead(CONTROLS_DT_PIN);
+  int clkSignal = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
+  int dtSignal = digitalRead(CONTROLS_VERTICAL_DT_PIN);
 
-  int servoMove = servoMotor.read();
+  int servoMove = verticalServo.read();
   if (clkSignal != clkLastSignal && clkSignal != clkLastSignal2)
   {
 
     if (dtSignal == HIGH)
     {
       //Serial.println("Izquierda");
-      pos = pos + 1;
-      if (pos > 158)
+      verticalPos = verticalPos + 1;
+      if (verticalPos > 158)
       {
-        pos = 158;
+        verticalPos = 158;
       }
     }
     else
     {
       //Serial.println("Derecha");
-      pos = pos - 1;
-      if (pos < 0)
+      verticalPos = verticalPos - 1;
+      if (verticalPos < 0)
       {
-        pos = 0;
+        verticalPos = 0;
       }
     }
 
-    Serial.println(pos);
-    servoMotor.write(pos);
+    Serial.println(verticalPos);
+    verticalServo.write(verticalPos);
     delay(100);
 
     clkLastSignal2 = clkLastSignal;

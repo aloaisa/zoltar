@@ -4,17 +4,21 @@
  * Check if the coin enter - 1 digital input
  * When coin in, then start game.
  */
+
+void statusInit_StandBy()
+{
+  digitalWrite(ENABLE_COIN_MACHINE_PIN, HIGH);
+}
+
 int statusStandBy(int status)
 {
-
-  // TODO Activar/Desactivar máquina de monedas
-  // ENABLE_COIN_MACHINE_PIN
-
   int inputCoin = digitalRead(DETECT_COIN_PIN);
-  if (inputCoin == HIGH)
+  if (inputCoin == LOW)
   {
     status = STATUS_INIT;
     delay(DELAY_AFTER_STATUS_INIT); // meter espera entre moneda y movimiento de la cabeza
+
+    digitalWrite(ENABLE_COIN_MACHINE_PIN, LOW);
   }
 
   return status;

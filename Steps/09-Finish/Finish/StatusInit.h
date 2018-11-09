@@ -8,18 +8,14 @@
  * And wait a defined time to start the game
  */
 boolean isStatusInit = false;
-boolean mouthMove;
 
 DFRobotDFPlayerMini musicDFPlayer;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
 Servo headServoMotor;
-
-void statusInit_initialize()
-{
-  initMusicConfiguration();
-  initHeadMove();
-}
+int servoHeadPosition = 0;
+int servoDirection = 1;
+boolean mouthMove;
 
 void initMusicConfiguration()
 {
@@ -33,9 +29,14 @@ void initMusicConfiguration()
   musicDFPlayer.volume(MUSIC_VOLUME);
 }
 
-void playMusic()
+void initHeadMove()
 {
-  musicDFPlayer.play(1);
+  headServoMotor.attach(HEAD_SERVO_PIN);
+  servoHeadPosition = 0;
+  servoDirection = 1;
+  headServoMotor.write(servoHeadPosition);
+
+  mouthMove = false;
 }
 
 void eyesLedOn()
@@ -48,13 +49,15 @@ void eyesLedOff()
   digitalWrite(EYES_LED_PIN, LOW);
 }
 
-void initHeadMove()
+void statusInit_initialize()
 {
-  headServoMotor.attach(HEAD_SERVO_PIN);
-  headServoMotor.write(0);
-  delay(1000);
+  initMusicConfiguration();
+  initHeadMove();
+}
 
-  mouthMove = false;
+void playMusic()
+{
+  musicDFPlayer.play(1);
 }
 
 void mouthMoveOn()
@@ -69,24 +72,36 @@ boolean statusInit_headMoveIsActive()
 
 void statusInit_moveHead()
 {
-  // TODO Iniciar Servo Cabeza
-  // Mover servo arriba y abajo continuo
-}
+  servoHeadPosition = servoHeadPosition + servoDirection;
 
-void statusInit_Reset()
-{
-  isStatusInit = false;
-  initHeadMove();
-  eyesLedOff();
+  if (servoHeadPosition > 158)
+  {
+    servoHeadPosition = 158;
+    servoDirection = -1;
+  }
+
+  if (servoHeadPosition < 0)
+  {
+    servoHeadPosition = 0;
+    servoDirection = 1;
+  }
+
+  headServoMotor.write(servoHeadPosition);
+  // delay(100);
 }
 
 int statusInit(int status)
 {
   if (isStatusInit == false)
   {
+    Serial.println("INIT-1");
     playMusic();
-    eyesLedOn();
+    Serial.println("INIT-2");
     mouthMoveOn();
+    Serial.println("INIT-3");
+
+    // eyesLedOn();
+    // Serial.println("INIT-4");
 
     isStatusInit = true;
 
@@ -94,4 +109,11 @@ int statusInit(int status)
   }
 
   return status;
+}
+
+void statusInit_Reset()
+{
+  isStatusInit = false;
+  initHeadMove();
+  eyesLedOff();
 }
