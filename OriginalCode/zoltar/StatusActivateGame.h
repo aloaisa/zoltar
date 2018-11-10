@@ -19,7 +19,7 @@ DFRobotDFPlayerMini soundDFPlayer;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
 boolean isStatusActivateGame = false;
-unsigned long finishTime;
+unsigned long finishTimeGame;
 boolean controlsActive;
 int clkLastSignal, clkLastSignal2;
 
@@ -162,18 +162,18 @@ int statusActivateGame(int status)
     pointToMouthLedOn();
     activateControlls();
 
-    finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME + MAKE_WITH_WAIT_TIME;
+    finishTimeGame = millis() + POINT_TO_MOUTH_WAIT_TIME + MAKE_WITH_WAIT_TIME;
     isStatusActivateGame = true;
   }
 
   // Se enciende pide un deseo, pero puedes seguir moviendolo hasta otros
   // Activa los leds de pide un deseo.
-  if ((finishTime - MAKE_WITH_WAIT_TIME) < millis())
+  if ((finishTimeGame - MAKE_WITH_WAIT_TIME) < millis())
   {
     makeAWishLedOn();
   }
 
-  if (finishTime < millis())
+  if (finishTimeGame < millis())
   {
     desactivateControlls();
     pushButtonCoinLedOn();

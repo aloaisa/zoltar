@@ -63,4 +63,6 @@ const int FREE_COIN_TIME = 10000;
 const int SELENOID_WAIT_TIME = 1000;
 
 const int WAIT_LOST_TIME = 5000;
+
+const int GAME_TOTAL_TIME_FINISH = 5000;
 #define STEPS 512
