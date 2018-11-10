@@ -13,7 +13,7 @@ void statusInit_StandBy()
 int statusStandBy(int status)
 {
   int inputCoin = digitalRead(DETECT_COIN_PIN);
-  if (inputCoin == LOW)
+  if (inputCoin == HIGH)
   {
     status = STATUS_INIT;
     delay(DELAY_AFTER_STATUS_INIT); // meter espera entre moneda y movimiento de la cabeza
