@@ -69,8 +69,6 @@ int statusActivateGame(int status)
     isStatusActivateGame = true;
   }
 
-  // Se enciende pide un deseo, pero puedes seguir moviendolo hasta otros
-  // Activa los leds de pide un deseo.
   if ((finishTime - MAKE_WITH_WAIT_TIME) <= millis())
   {
     makeAWishLedOn();

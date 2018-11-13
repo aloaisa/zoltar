@@ -52,6 +52,17 @@ const int DELAY_AFTER_INSERT_COIN = 3000;
 const int POINT_TO_MOUTH_WAIT_TIME = 25000;
 const int MAKE_WITH_WAIT_TIME = 5000;
 
+///////////////////////
+// HEAD SERVO LIMITS //
+///////////////////////
 const int INIT_HEAD_SERVO_POSITION = 83;
 const int MAX_HEAD_SERVO_POSITION = 40;
 const int STEP_HEAD_SERVO_POSITION = 2;
+
+///////////////////////////
+// CONTROLS SERVO LIMITS //
+///////////////////////////
+const int INIT_SERVO_VERTICAL_POSITION = 30;
+const int MAX_SERVO_VERTICAL_POSITION = 140;
+const int INIT_SERVO_HORIZONTAL_POSITION = 0;
+const int MAX_SERVO_HORIZONTAL_POSITION = 85;
