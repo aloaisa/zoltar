@@ -48,8 +48,8 @@ const int MUSIC_TX_PIN = 11;
 const int SOUND_RX_PIN = 12;
 const int SOUND_TX_PIN = 13;
 
-const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
-const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
+const int MUSIC_VOLUME = 30; //Set volume value. From 0 to 30
+const int SOUND_VOLUME = 30; //Set volume value. From 0 to 30
 
 ///////////
 // TIMES //
@@ -63,3 +63,7 @@ const int MAKE_WITH_WAIT_TIME = 5000;
 const int FREE_COIN_TIME = 10000;
 
 const int WAIT_LOST_TIME = 5000;
+
+const int INIT_HEAD_SERVO_POSITION = 83;
+const int MAX_HEAD_SERVO_POSITION = 40;
+const int STEP_HEAD_SERVO_POSITION = 2;

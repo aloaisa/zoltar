@@ -50,8 +50,8 @@ const int SWITCH_LOST_CARD_MOTOR_PIN = 44; // Done
 
 const int MOTOR_STEP_VELOCITY_DELAY = 50;
 
-const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
-const int SOUND_VOLUME = 25; //Set volume value. From 0 to 30
+const int MUSIC_VOLUME = 30; //Set volume value. From 0 to 30
+const int SOUND_VOLUME = 30; //Set volume value. From 0 to 30
 
 const int POINT_TO_MOUTH_WAIT_TIME = 25000;
 const int MAKE_WITH_WAIT_TIME = 5000;

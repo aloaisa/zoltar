@@ -17,4 +17,4 @@ const int MUSIC_TX_PIN = 11;
 const int DELAY_AFTER_STATUS_INIT = 2000;
 const int DELAY_AFTER_INSERT_COIN = 3000;
 
-const int MUSIC_VOLUME = 25; //Set volume value. From 0 to 30
+const int MUSIC_VOLUME = 30; //Set volume value. From 0 to 30
