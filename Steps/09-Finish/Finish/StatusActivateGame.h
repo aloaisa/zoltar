@@ -40,12 +40,14 @@ void initSoundConfiguration()
 void initServoConfiguration()
 {
   verticalServo.attach(SERVO_VERTICAL_PIN);
-  verticalServo.write(0);
-  delay(2000);
+  verticalServo.write(MAX_SERVO_VERTICAL_POSITION); // reset position
+  delay(1000);
+  verticalServo.write(INIT_SERVO_VERTICAL_POSITION); // 0 position
+  delay(1000);
 
   horizontalServo.attach(SERVO_HORIZONTAL_PIN);
-  horizontalServo.write(0);
-  delay(2000);
+  horizontalServo.write(INIT_SERVO_HORIZONTAL_POSITION); // 0 position
+  delay(1000);
 
   /* Read Pin A and B
    Whatever state it's in will reflect the last position   
@@ -63,6 +65,11 @@ void statusActivateGame_init()
 void pointToMouthLedOn()
 {
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
+}
+
+void pointToMouthLedOff()
+{
+  digitalWrite(POINT_TO_MOUTH_LED_PIN, LOW);
 }
 
 void makeAWishLedOn()
@@ -116,23 +123,24 @@ void moveVerticalControl()
 
   if (clkSignal != clkLastVerticalSignal && clkSignal != clkLastVerticalSignal2)
   {
+    Serial.println("moveVerticalControl");
 
     if (dtSignal == HIGH)
     {
       //Serial.println("Izquierda");
       verticalPos = verticalPos + 1;
-      if (verticalPos > 158)
+      if (verticalPos > MAX_SERVO_VERTICAL_POSITION)
       {
-        verticalPos = 158;
+        verticalPos = MAX_SERVO_VERTICAL_POSITION;
       }
     }
     else
     {
       //Serial.println("Derecha");
       verticalPos = verticalPos - 1;
-      if (verticalPos < 0)
+      if (verticalPos < INIT_SERVO_VERTICAL_POSITION)
       {
-        verticalPos = 0;
+        verticalPos = INIT_SERVO_VERTICAL_POSITION;
       }
     }
 
@@ -151,26 +159,28 @@ void moveHorizonalControl()
   if (clkSignal != clkLastHorizontalSignal && clkSignal != clkLastHorizontalSignal2)
   {
 
+    Serial.println("moveHorizonalControl");
+
     if (dtSignal == HIGH)
     {
       //Serial.println("Izquierda");
       horizontalPos = horizontalPos + 1;
-      if (horizontalPos > 158)
+      if (horizontalPos > MAX_SERVO_HORIZONTAL_POSITION)
       {
-        horizontalPos = 158;
+        horizontalPos = MAX_SERVO_HORIZONTAL_POSITION;
       }
     }
     else
     {
       //Serial.println("Derecha");
       horizontalPos = horizontalPos - 1;
-      if (horizontalPos < 0)
+      if (horizontalPos < INIT_SERVO_HORIZONTAL_POSITION)
       {
-        horizontalPos = 0;
+        horizontalPos = INIT_SERVO_HORIZONTAL_POSITION;
       }
     }
 
-    verticalServo.write(horizontalPos);
+    horizontalServo.write(horizontalPos);
     clkLastHorizontalSignal2 = clkLastHorizontalSignal;
   }
 
@@ -222,14 +232,15 @@ void statusActivateGame_Reset()
   desactivateControls();
   makeAWishLedOff();
   pushButtonCoinLedOff();
+  pointToMouthLedOff();
 
   // Move servos to 0 position
-  for (int initPoint = 158; initPoint >= 0; initPoint--)
-  {
-    verticalServo.write(initPoint);
-    horizontalServo.write(initPoint);
-    delay(15);
-  }
+  // for (int initPoint = 158; initPoint >= 0; initPoint--)
+  // {
+  //   verticalServo.write(initPoint);
+  //   horizontalServo.write(initPoint);
+  //   delay(15);
+  // }
   verticalPos = 0;
   horizontalPos = 0;
 }

@@ -46,6 +46,11 @@ void eyesLedOn()
   digitalWrite(EYES_LED_PIN, HIGH);
 }
 
+void eyesLedOff()
+{
+  digitalWrite(EYES_LED_PIN, LOW);
+}
+
 void statusInit_initialize()
 {
   initMusicConfiguration();
