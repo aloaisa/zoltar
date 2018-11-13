@@ -31,11 +31,12 @@ void initMusicConfiguration()
 
 void initHeadMove()
 {
+  Serial.println("Init Head Servo...");
   headServoMotor.attach(HEAD_SERVO_PIN);
-  servoHeadPosition = 0;
+  servoHeadPosition = INIT_HEAD_SERVO_POSITION;
   servoDirection = 1;
   headServoMotor.write(servoHeadPosition);
-  // delay(1000);
+  delay(2000);
 
   mouthMove = false;
 }
@@ -70,20 +71,19 @@ void statusInit_moveHead()
 {
   servoHeadPosition = servoHeadPosition + servoDirection;
 
-  if (servoHeadPosition > 158)
+  if (servoHeadPosition > INIT_HEAD_SERVO_POSITION)
   {
-    servoHeadPosition = 158;
-    servoDirection = -1;
+    servoHeadPosition = INIT_HEAD_SERVO_POSITION;
+    servoDirection = -STEP_HEAD_SERVO_POSITION;
   }
 
-  if (servoHeadPosition < 0)
+  if (servoHeadPosition < MAX_HEAD_SERVO_POSITION)
   {
-    servoHeadPosition = 0;
-    servoDirection = 1;
+    servoHeadPosition = MAX_HEAD_SERVO_POSITION;
+    servoDirection = STEP_HEAD_SERVO_POSITION;
   }
 
   headServoMotor.write(servoHeadPosition);
-  // delay(100);
 }
 
 int statusInit(int status)
@@ -95,9 +95,8 @@ int statusInit(int status)
     Serial.println("INIT-2");
     mouthMoveOn();
     Serial.println("INIT-3");
-
-    // eyesLedOn();
-    // Serial.println("INIT-4");
+    eyesLedOn();
+    Serial.println("INIT-4");
 
     isStatusInit = true;
 
