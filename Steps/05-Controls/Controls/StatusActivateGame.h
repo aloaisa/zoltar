@@ -1,5 +1,5 @@
 /**
- * Activate game:
+
  * On leds "Point to the mouth" - 1 digital input
  * On sound - 2 Digital-analogical inputs
  * On controls - 2 Analagical inputs
@@ -11,7 +11,7 @@
  */
 
 DFRobotDFPlayerMini soundDFPlayer;
-SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+// SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
 boolean isStatusActivateGame = false;
 unsigned long finishTime;
@@ -22,11 +22,24 @@ Servo horizontalServo;
 
 boolean controlsActive;
 int verticalPos, horizontalPos;
+int lastVerticalPos, lastHorizontalPos;
 int clkLastVerticalSignal, clkLastVerticalSignal2;
 int clkLastHorizontalSignal, clkLastHorizontalSignal2;
 
+boolean verticalALast;
+boolean verticalBLast;
+boolean horizontalALast;
+boolean horizontalBLast;
+boolean goStopVertical;
+boolean goStopHorizontal;
+
+int incrementoVertical = 0;
+int incrementoHorizontal = 0;
+
 void initSoundConfiguration()
 {
+  Serial.println("Init sound configuration...");
+
   soundSoftwareSerial.begin(BAUDS);
   if (!soundDFPlayer.begin(soundSoftwareSerial))
   {
@@ -37,23 +50,40 @@ void initSoundConfiguration()
   soundDFPlayer.volume(SOUND_VOLUME);
 }
 
+void freeCoin()
+{
+  digitalWrite(SOLENOID_PIN, HIGH);
+  delay(500);
+  digitalWrite(SOLENOID_PIN, LOW);
+  delay(500);
+
+  digitalWrite(SOLENOID_PIN, HIGH);
+  delay(500);
+  digitalWrite(SOLENOID_PIN, LOW);
+  delay(500);
+
+  digitalWrite(SOLENOID_PIN, HIGH);
+  delay(500);
+  digitalWrite(SOLENOID_PIN, LOW);
+  delay(500);
+}
+
 void initServoConfiguration()
 {
+  Serial.println("Init control servos configuration...");
+
   verticalServo.attach(SERVO_VERTICAL_PIN);
   verticalServo.write(MAX_SERVO_VERTICAL_POSITION); // reset position
   delay(1000);
+
+  freeCoin();
+
   verticalServo.write(INIT_SERVO_VERTICAL_POSITION); // 0 position
   delay(1000);
 
   horizontalServo.attach(SERVO_HORIZONTAL_PIN);
   horizontalServo.write(INIT_SERVO_HORIZONTAL_POSITION); // 0 position
   delay(1000);
-
-  /* Read Pin A and B
-   Whatever state it's in will reflect the last position   
-   */
-  verticalPos = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
-  horizontalPos = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
 }
 
 void statusActivateGame_init()
@@ -64,6 +94,7 @@ void statusActivateGame_init()
 
 void pointToMouthLedOn()
 {
+  Serial.println("pointToMouthLedOn");
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
@@ -71,6 +102,7 @@ void makeAWishLedOn()
 {
   if (isWishLedOn == false)
   {
+    Serial.println("makeAWishLedOn");
     isWishLedOn = true;
     digitalWrite(MAKE_WISH_LED_PIN, HIGH);
   }
@@ -78,6 +110,7 @@ void makeAWishLedOn()
 
 void pushButtonCoinLedOn()
 {
+  Serial.println("pushButtonCoinLedOn");
   digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH);
 }
 
@@ -88,6 +121,28 @@ void playSound()
 
 void activateControls()
 {
+
+  digitalWrite(CONTROLS_VERTICAL_DT_PIN, HIGH);
+  digitalWrite(CONTROLS_VERTICAL_CLK_PIN, HIGH);
+
+  digitalWrite(CONTROLS_HORIZONTAL_DT_PIN, HIGH);
+  digitalWrite(CONTROLS_HORIZONTAL_CLK_PIN, HIGH);
+
+  verticalPos = INIT_SERVO_VERTICAL_POSITION;
+  horizontalPos = INIT_SERVO_HORIZONTAL_POSITION;
+
+  lastVerticalPos = 0;
+  lastHorizontalPos = 0;
+
+  goStopVertical = 0;
+  goStopHorizontal = 0;
+
+  verticalALast = 0;
+  verticalBLast = 0;
+
+  horizontalALast = 0;
+  horizontalBLast = 0;
+
   controlsActive = true;
 }
 
@@ -103,73 +158,204 @@ boolean isControlsActive()
 
 void moveVerticalControl()
 {
-  int clkSignal = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
-  int dtSignal = digitalRead(CONTROLS_VERTICAL_DT_PIN);
+  boolean verticalA = digitalRead(CONTROLS_VERTICAL_DT_PIN);
+  boolean verticalB = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
 
-  if (clkSignal != clkLastVerticalSignal && clkSignal != clkLastVerticalSignal2)
+  if (goStopVertical == 0)
   {
-    Serial.println("moveVerticalControl");
+    goStopVertical = 1;
+  }
+  else
+  {
 
-    if (dtSignal == HIGH)
+    if (verticalALast == verticalA && verticalBLast == verticalB)
     {
-      //Serial.println("Izquierda");
-      verticalPos = verticalPos + 1;
+      //Serial.println("v");
+    }
+    else
+    {
+
+      int nextStep = 0;
+      if (verticalALast == 0 && verticalBLast == 0)
+      {
+        if (verticalA == 1 && verticalB == 0)
+        {
+          nextStep++;
+        }
+        else if (verticalA == 0 && verticalB == 1)
+        {
+          nextStep--;
+        }
+      }
+      else if (verticalALast == 1 && verticalBLast == 0)
+      {
+        if (verticalA == 1 && verticalB == 1)
+        {
+          nextStep++;
+        }
+        else if (verticalA == 0 && verticalB == 0)
+        {
+          nextStep--;
+        }
+      }
+      else if (verticalALast == 1 && verticalBLast == 1)
+      {
+        if (verticalA == 0 && verticalB == 1)
+        {
+          nextStep++;
+        }
+        else if (verticalA == 1 && verticalB == 0)
+        {
+          nextStep--;
+        }
+      }
+      else if (verticalALast == 0 && verticalBLast == 1)
+      {
+        if (verticalA == 0 && verticalB == 0)
+        {
+          nextStep++;
+        }
+        else if (verticalA == 1 && verticalB == 1)
+        {
+          nextStep--;
+        }
+      }
+
+      if (nextStep != 0)
+      {
+        if (lastVerticalPos != nextStep)
+        {
+          lastVerticalPos = nextStep;
+        }
+        else
+        {
+          verticalPos = verticalPos + nextStep;
+          Serial.print("verticalPos: ");
+          Serial.println(verticalPos);
+          goStopVertical = 0;
+        }
+      }
+
       if (verticalPos > MAX_SERVO_VERTICAL_POSITION)
       {
         verticalPos = MAX_SERVO_VERTICAL_POSITION;
       }
-    }
-    else
-    {
-      //Serial.println("Derecha");
-      verticalPos = verticalPos - 1;
+
       if (verticalPos < INIT_SERVO_VERTICAL_POSITION)
       {
         verticalPos = INIT_SERVO_VERTICAL_POSITION;
       }
-    }
 
-    verticalServo.write(verticalPos);
-    clkLastVerticalSignal2 = clkLastVerticalSignal;
+      verticalServo.write(verticalPos);
+    }
   }
 
-  clkLastVerticalSignal = clkSignal;
+  verticalALast = verticalA;
+  verticalBLast = verticalB;
 }
 
 void moveHorizonalControl()
 {
-  int clkSignal = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
-  int dtSignal = digitalRead(CONTROLS_HORIZONTAL_DT_PIN);
+  boolean horizontalA = digitalRead(CONTROLS_HORIZONTAL_DT_PIN);
+  boolean horizontalB = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
 
-  if (clkSignal != clkLastHorizontalSignal && clkSignal != clkLastHorizontalSignal2)
+  // Serial.print("horizontalA: ");
+  // Serial.print(horizontalA);
+  // Serial.print(" - horizontalB: ");
+  // Serial.println(horizontalB);
+
+  if (goStopHorizontal == 0)
+  {
+    goStopHorizontal = 1;
+  }
+  else
   {
 
-    Serial.println("moveHorizonalControl");
-
-    if (dtSignal == HIGH)
+    if (horizontalALast == horizontalA && horizontalBLast == horizontalB)
     {
-      //Serial.println("Izquierda");
-      horizontalPos = horizontalPos + 1;
+      // Serial.println("h");
+    }
+    else
+    {
+
+      int nextStep = 0;
+
+      if (horizontalALast == 0 && horizontalBLast == 0)
+      {
+        if (horizontalA == 1 && horizontalB == 0)
+        {
+          nextStep++;
+        }
+        else if (horizontalA == 0 && horizontalB == 1)
+        {
+          nextStep--;
+        }
+      }
+      else if (horizontalALast == 1 && horizontalBLast == 0)
+      {
+        if (horizontalA == 1 && horizontalB == 1)
+        {
+          nextStep++;
+        }
+        else if (horizontalA == 0 && horizontalB == 0)
+        {
+          nextStep--;
+        }
+      }
+      else if (horizontalALast == 1 && horizontalBLast == 1)
+      {
+        if (horizontalA == 0 && horizontalB == 1)
+        {
+          nextStep++;
+        }
+        else if (horizontalA == 1 && horizontalB == 0)
+        {
+          nextStep--;
+        }
+      }
+      else if (horizontalALast == 0 && horizontalBLast == 1)
+      {
+        if (horizontalA == 0 && horizontalB == 0)
+        {
+          nextStep++;
+        }
+        else if (horizontalA == 1 && horizontalB == 1)
+        {
+          nextStep--;
+        }
+      }
+
+      if (nextStep != 0)
+      {
+        if (lastHorizontalPos != nextStep)
+        {
+          lastHorizontalPos = nextStep;
+        }
+        else
+        {
+          horizontalPos = horizontalPos + nextStep;
+          Serial.print("horizontalPos: ");
+          Serial.println(horizontalPos);
+          goStopHorizontal = 0;
+        }
+      }
+
       if (horizontalPos > MAX_SERVO_HORIZONTAL_POSITION)
       {
         horizontalPos = MAX_SERVO_HORIZONTAL_POSITION;
       }
-    }
-    else
-    {
-      //Serial.println("Derecha");
-      horizontalPos = horizontalPos - 1;
+
       if (horizontalPos < INIT_SERVO_HORIZONTAL_POSITION)
       {
         horizontalPos = INIT_SERVO_HORIZONTAL_POSITION;
       }
-    }
 
-    horizontalServo.write(horizontalPos);
-    clkLastHorizontalSignal2 = clkLastHorizontalSignal;
+      horizontalServo.write(horizontalPos);
+    }
   }
 
-  clkLastHorizontalSignal = clkSignal;
+  horizontalALast = horizontalA;
+  horizontalBLast = horizontalB;
 }
 
 void moveControls()
@@ -182,8 +368,12 @@ int statusActivateGame(int status)
 {
   if (isStatusActivateGame == false)
   {
+    Serial.println("STATUS_ACTIVATE_GAME...");
+    Serial.println("Play Sound...");
     playSound();
+    Serial.println("Point to mouth led ON...");
     pointToMouthLedOn();
+    Serial.println("Activate controll...");
     activateControls();
 
     finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME + MAKE_WITH_WAIT_TIME;

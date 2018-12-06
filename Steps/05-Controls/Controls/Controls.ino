@@ -14,15 +14,15 @@ void setup()
   Serial.println("00000000");
   Serial.begin(BAUDS);
 
-  Serial.println("1");
+  Serial.println("Initialize pins");
   initializePins();
-  Serial.println("2");
+  Serial.println("init Stand By...");
   statusInit_StandBy();
-  Serial.println("3");
-  statusInit_initialize();
-  Serial.println("4");
+  Serial.println("Init music configuration");
+  initMusicConfiguration();
+  Serial.println("Init Activate Game");
   statusActivateGame_init();
-  Serial.println("5");
+  Serial.println("INIT GAME...");
 
   // Set initial status
   status = STATUS_STAND_BY;
@@ -33,21 +33,24 @@ void initializePins()
   pinMode(DETECT_COIN_PIN, INPUT);
   pinMode(ENABLE_COIN_MACHINE_PIN, OUTPUT);
 
-  pinMode(EYES_LED_PIN, OUTPUT);
   pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
   pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
   pinMode(MAKE_WISH_LED_PIN, OUTPUT);
+
+  pinMode(NANO_PIN, OUTPUT);
 
   pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT);
   pinMode(CONTROLS_VERTICAL_CLK_PIN, INPUT);
   pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT);
   pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT);
+
+  pinMode(SOLENOID_PIN, OUTPUT);
 }
 
 void loop()
 {
 
-  printStatus();
+  //printStatus();
 
   switch (status)
   {
@@ -62,17 +65,6 @@ void loop()
   default: //case "STATUS_STAND_BY":
     status = statusStandBy(status);
     break;
-  }
-
-  checkContinuousActiveThings();
-}
-
-void checkContinuousActiveThings()
-{
-  if (statusInit_headMoveIsActive())
-  {
-    statusInit_moveHead();
-    delay(100);
   }
 }
 

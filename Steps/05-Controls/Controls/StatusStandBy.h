@@ -4,19 +4,31 @@
  * Check if the coin enter - 1 digital input
  * When coin in, then start game.
  */
+void nano_Off()
+{
+  digitalWrite(NANO_PIN, LOW);
+}
 
 void statusInit_StandBy()
 {
+  nano_Off();
   digitalWrite(ENABLE_COIN_MACHINE_PIN, HIGH);
+}
+
+void nano_On()
+{
+  digitalWrite(NANO_PIN, HIGH);
 }
 
 int statusStandBy(int status)
 {
   int inputCoin = digitalRead(DETECT_COIN_PIN);
+  Serial.println("coin: " + inputCoin);
+
   if (inputCoin == HIGH)
   {
     status = STATUS_INIT;
-    delay(DELAY_AFTER_STATUS_INIT); // meter espera entre moneda y movimiento de la cabeza
+    nano_On();
 
     digitalWrite(ENABLE_COIN_MACHINE_PIN, LOW);
   }
