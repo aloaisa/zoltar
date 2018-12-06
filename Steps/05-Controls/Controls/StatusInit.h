@@ -36,8 +36,6 @@ int statusInit(int status)
     playMusic();
 
     isStatusInit = true;
-
-    nano_Off();
     status = STATUS_ACTIVATE_GAME;
   }
 

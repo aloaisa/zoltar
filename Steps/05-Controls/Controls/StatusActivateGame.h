@@ -11,7 +11,7 @@
  */
 
 DFRobotDFPlayerMini soundDFPlayer;
-// SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
+SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
 boolean isStatusActivateGame = false;
 unsigned long finishTime;
@@ -20,18 +20,7 @@ boolean isWishLedOn = false;
 Servo verticalServo;
 Servo horizontalServo;
 
-boolean controlsActive;
 int verticalPos, horizontalPos;
-int lastVerticalPos, lastHorizontalPos;
-int clkLastVerticalSignal, clkLastVerticalSignal2;
-int clkLastHorizontalSignal, clkLastHorizontalSignal2;
-
-boolean verticalALast;
-boolean verticalBLast;
-boolean horizontalALast;
-boolean horizontalBLast;
-boolean goStopVertical;
-boolean goStopHorizontal;
 
 int incrementoVertical = 0;
 int incrementoHorizontal = 0;
@@ -121,247 +110,21 @@ void playSound()
 
 void activateControls()
 {
-
-  digitalWrite(CONTROLS_VERTICAL_DT_PIN, HIGH);
-  digitalWrite(CONTROLS_VERTICAL_CLK_PIN, HIGH);
-
-  digitalWrite(CONTROLS_HORIZONTAL_DT_PIN, HIGH);
-  digitalWrite(CONTROLS_HORIZONTAL_CLK_PIN, HIGH);
-
   verticalPos = INIT_SERVO_VERTICAL_POSITION;
   horizontalPos = INIT_SERVO_HORIZONTAL_POSITION;
 
-  lastVerticalPos = 0;
-  lastHorizontalPos = 0;
-
-  goStopVertical = 0;
-  goStopHorizontal = 0;
-
-  verticalALast = 0;
-  verticalBLast = 0;
-
-  horizontalALast = 0;
-  horizontalBLast = 0;
-
-  controlsActive = true;
+  attachInterrupt(digitalPinToInterrupt(CONTROLS_VERTICAL_DT_PIN), verticalServoInterruptionDT, RISING);
+  attachInterrupt(digitalPinToInterrupt(CONTROLS_VERTICAL_CLK_PIN), verticalServoInterruptionCLK, RISING);
+  attachInterrupt(digitalPinToInterrupt(CONTROLS_HORIZONTAL_DT_PIN), horizontalServoInterruptionDT, RISING);
+  attachInterrupt(digitalPinToInterrupt(CONTROLS_HORIZONTAL_CLK_PIN), horizontalServoInterruptionCLK, RISING);
 }
 
 void desactivateControls()
 {
-  controlsActive = false;
-}
-
-boolean isControlsActive()
-{
-  return controlsActive;
-}
-
-void moveVerticalControl()
-{
-  boolean verticalA = digitalRead(CONTROLS_VERTICAL_DT_PIN);
-  boolean verticalB = digitalRead(CONTROLS_VERTICAL_CLK_PIN);
-
-  if (goStopVertical == 0)
-  {
-    goStopVertical = 1;
-  }
-  else
-  {
-
-    if (verticalALast == verticalA && verticalBLast == verticalB)
-    {
-      //Serial.println("v");
-    }
-    else
-    {
-
-      int nextStep = 0;
-      if (verticalALast == 0 && verticalBLast == 0)
-      {
-        if (verticalA == 1 && verticalB == 0)
-        {
-          nextStep++;
-        }
-        else if (verticalA == 0 && verticalB == 1)
-        {
-          nextStep--;
-        }
-      }
-      else if (verticalALast == 1 && verticalBLast == 0)
-      {
-        if (verticalA == 1 && verticalB == 1)
-        {
-          nextStep++;
-        }
-        else if (verticalA == 0 && verticalB == 0)
-        {
-          nextStep--;
-        }
-      }
-      else if (verticalALast == 1 && verticalBLast == 1)
-      {
-        if (verticalA == 0 && verticalB == 1)
-        {
-          nextStep++;
-        }
-        else if (verticalA == 1 && verticalB == 0)
-        {
-          nextStep--;
-        }
-      }
-      else if (verticalALast == 0 && verticalBLast == 1)
-      {
-        if (verticalA == 0 && verticalB == 0)
-        {
-          nextStep++;
-        }
-        else if (verticalA == 1 && verticalB == 1)
-        {
-          nextStep--;
-        }
-      }
-
-      if (nextStep != 0)
-      {
-        if (lastVerticalPos != nextStep)
-        {
-          lastVerticalPos = nextStep;
-        }
-        else
-        {
-          verticalPos = verticalPos + nextStep;
-          Serial.print("verticalPos: ");
-          Serial.println(verticalPos);
-          goStopVertical = 0;
-        }
-      }
-
-      if (verticalPos > MAX_SERVO_VERTICAL_POSITION)
-      {
-        verticalPos = MAX_SERVO_VERTICAL_POSITION;
-      }
-
-      if (verticalPos < INIT_SERVO_VERTICAL_POSITION)
-      {
-        verticalPos = INIT_SERVO_VERTICAL_POSITION;
-      }
-
-      verticalServo.write(verticalPos);
-    }
-  }
-
-  verticalALast = verticalA;
-  verticalBLast = verticalB;
-}
-
-void moveHorizonalControl()
-{
-  boolean horizontalA = digitalRead(CONTROLS_HORIZONTAL_DT_PIN);
-  boolean horizontalB = digitalRead(CONTROLS_HORIZONTAL_CLK_PIN);
-
-  // Serial.print("horizontalA: ");
-  // Serial.print(horizontalA);
-  // Serial.print(" - horizontalB: ");
-  // Serial.println(horizontalB);
-
-  if (goStopHorizontal == 0)
-  {
-    goStopHorizontal = 1;
-  }
-  else
-  {
-
-    if (horizontalALast == horizontalA && horizontalBLast == horizontalB)
-    {
-      // Serial.println("h");
-    }
-    else
-    {
-
-      int nextStep = 0;
-
-      if (horizontalALast == 0 && horizontalBLast == 0)
-      {
-        if (horizontalA == 1 && horizontalB == 0)
-        {
-          nextStep++;
-        }
-        else if (horizontalA == 0 && horizontalB == 1)
-        {
-          nextStep--;
-        }
-      }
-      else if (horizontalALast == 1 && horizontalBLast == 0)
-      {
-        if (horizontalA == 1 && horizontalB == 1)
-        {
-          nextStep++;
-        }
-        else if (horizontalA == 0 && horizontalB == 0)
-        {
-          nextStep--;
-        }
-      }
-      else if (horizontalALast == 1 && horizontalBLast == 1)
-      {
-        if (horizontalA == 0 && horizontalB == 1)
-        {
-          nextStep++;
-        }
-        else if (horizontalA == 1 && horizontalB == 0)
-        {
-          nextStep--;
-        }
-      }
-      else if (horizontalALast == 0 && horizontalBLast == 1)
-      {
-        if (horizontalA == 0 && horizontalB == 0)
-        {
-          nextStep++;
-        }
-        else if (horizontalA == 1 && horizontalB == 1)
-        {
-          nextStep--;
-        }
-      }
-
-      if (nextStep != 0)
-      {
-        if (lastHorizontalPos != nextStep)
-        {
-          lastHorizontalPos = nextStep;
-        }
-        else
-        {
-          horizontalPos = horizontalPos + nextStep;
-          Serial.print("horizontalPos: ");
-          Serial.println(horizontalPos);
-          goStopHorizontal = 0;
-        }
-      }
-
-      if (horizontalPos > MAX_SERVO_HORIZONTAL_POSITION)
-      {
-        horizontalPos = MAX_SERVO_HORIZONTAL_POSITION;
-      }
-
-      if (horizontalPos < INIT_SERVO_HORIZONTAL_POSITION)
-      {
-        horizontalPos = INIT_SERVO_HORIZONTAL_POSITION;
-      }
-
-      horizontalServo.write(horizontalPos);
-    }
-  }
-
-  horizontalALast = horizontalA;
-  horizontalBLast = horizontalB;
-}
-
-void moveControls()
-{
-  moveVerticalControl();
-  moveHorizonalControl();
+  detachInterrupt(digitalPinToInterrupt(CONTROLS_VERTICAL_DT_PIN));
+  detachInterrupt(digitalPinToInterrupt(CONTROLS_VERTICAL_CLK_PIN));
+  detachInterrupt(digitalPinToInterrupt(CONTROLS_HORIZONTAL_DT_PIN));
+  detachInterrupt(digitalPinToInterrupt(CONTROLS_HORIZONTAL_CLK_PIN));
 }
 
 int statusActivateGame(int status)
@@ -373,7 +136,7 @@ int statusActivateGame(int status)
     playSound();
     Serial.println("Point to mouth led ON...");
     pointToMouthLedOn();
-    Serial.println("Activate controll...");
+    Serial.println("Activate control...");
     activateControls();
 
     finishTime = millis() + POINT_TO_MOUTH_WAIT_TIME + MAKE_WITH_WAIT_TIME;
@@ -393,10 +156,55 @@ int statusActivateGame(int status)
     status = STATUS_WAITING_RELEASE_COIN;
   }
 
-  if (isControlsActive() == true)
+  return status;
+}
+
+void verticalServoInterruptionDT() {
+  if (digitalRead(CONTROLS_VERTICAL_DT_PIN) == LOW) {
+    moveVerticalServo(1);
+  } else {
+    moveVerticalServo(-1);
+  }
+}
+
+void verticalServoInterruptionCLK() {
+  if (digitalRead(CONTROLS_VERTICAL_CLK_PIN) == LOW) {
+    moveVerticalServo(-1);
+  } else {
+    moveVerticalServo(1);
+  }
+}
+
+void horizontalServoInterruptionDT()
+{
+  if (digitalRead(CONTROLS_HORIZONTAL_DT_PIN) == LOW) {
+    moveVerticalServo(1);
+  } else {
+    moveVerticalServo(-1);
+  }
+}
+
+void horizontalServoInterruptionCLK()
+{
+  if (digitalRead(CONTROLS_HORIZONTAL_CLK_PIN) == LOW) {
+    moveVerticalServo(-1);
+  } else {
+    moveVerticalServo(1);
+  }
+}
+
+void moveVerticalServo(int step) {
+
+  verticalPos += step;
+  if (verticalPos > MAX_SERVO_VERTICAL_POSITION)
   {
-    moveControls();
+    verticalPos = MAX_SERVO_VERTICAL_POSITION;
   }
 
-  return status;
+  if (verticalPos < INIT_SERVO_VERTICAL_POSITION)
+  {
+    verticalPos = INIT_SERVO_VERTICAL_POSITION;
+  }
+
+  verticalServo.write(verticalPos);
 }

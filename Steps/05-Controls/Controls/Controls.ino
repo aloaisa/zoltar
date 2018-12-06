@@ -39,10 +39,10 @@ void initializePins()
 
   pinMode(NANO_PIN, OUTPUT);
 
-  pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT);
-  pinMode(CONTROLS_VERTICAL_CLK_PIN, INPUT);
-  pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT);
-  pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT);
+  pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT_PULLUP);
+  pinMode(CONTROLS_VERTICAL_CLK_PIN, INPUT_PULLUP);
+  pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT_PULLUP);
+  pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT_PULLUP);
 
   pinMode(SOLENOID_PIN, OUTPUT);
 }
@@ -60,6 +60,11 @@ void loop()
 
   case STATUS_ACTIVATE_GAME:
     status = statusActivateGame(status);
+    break;
+
+  case STATUS_WAITING_RELEASE_COIN:
+    nano_Off();
+    status = STATUS_STAND_BY;
     break;
 
   default: //case "STATUS_STAND_BY":

@@ -24,7 +24,7 @@ void resetGame()
 
   digitalWrite(EYES_LED_PIN, LOW);
 
-  Serial.println("Stop game.");
+  Serial.println("Reset game.");
   runningGame = false;
 }
 
@@ -43,46 +43,44 @@ void setup()
 
   pinMode(ON_PIN, INPUT_PULLUP);
 
-  runningGame = false;
   servoHeadPosition = INIT_HEAD_SERVO_POSITION;
-  servoDirection = -STEP_HEAD_SERVO_POSITION
+  resetGame();
 }
 
-void initGame()
-{
-  runningGame = true;
-
+void initializeGame() {
   Serial.println("Eyes leds on...");
   digitalWrite(EYES_LED_PIN, HIGH);
 
   finishTime = millis() + GAME_TIME;
 }
 
-void checkRunGame()
+boolean isRunningGame()
 {
-  if (!runningGame)
-  {
-    int activateSignal = digitalRead(ON_PIN);
-    if (activateSignal == HIGH)
-    {
-      initGame();
+  int activateSignal = digitalRead(ON_PIN);
+  if (activateSignal == HIGH) {
+    
+    if (!runningGame) {
+      initializeGame();
     }
+    runningGame = true;
+
+  } else {
+    
+    if (runningGame) {
+      resetGame();
+    }
+    runningGame = false;
+
   }
+
+  return runningGame;
 }
 
 void loop()
 {
-  checkRunGame();
-  if (runningGame)
+  if (isRunningGame())
   {
-    if (finishTime > millis())
-    {
-      moveHead();
-    }
-    else
-    {
-      resetGame();
-    }
+    moveHead();
   }
 }
 
