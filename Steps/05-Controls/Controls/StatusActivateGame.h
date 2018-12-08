@@ -25,8 +25,7 @@ int verticalPos, horizontalPos;
 int incrementoVertical = 0;
 int incrementoHorizontal = 0;
 
-void initSoundConfiguration()
-{
+void initSoundConfiguration() {
   Serial.println("Init sound configuration...");
 
   soundSoftwareSerial.begin(BAUDS);
@@ -39,8 +38,8 @@ void initSoundConfiguration()
   soundDFPlayer.volume(SOUND_VOLUME);
 }
 
-void freeCoin()
-{
+void freeCoin() {
+  Serial.println("Free selenoid coin ...");
   digitalWrite(SOLENOID_PIN, HIGH);
   delay(500);
   digitalWrite(SOLENOID_PIN, LOW);
@@ -57,8 +56,7 @@ void freeCoin()
   delay(500);
 }
 
-void initServoConfiguration()
-{
+void initServoConfiguration() {
   Serial.println("Init control servos configuration...");
 
   verticalServo.attach(SERVO_VERTICAL_PIN);
@@ -75,20 +73,17 @@ void initServoConfiguration()
   delay(1000);
 }
 
-void statusActivateGame_init()
-{
+void statusActivateGame_init() {
   initSoundConfiguration();
   initServoConfiguration();
 }
 
-void pointToMouthLedOn()
-{
+void pointToMouthLedOn() {
   Serial.println("pointToMouthLedOn");
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
-void makeAWishLedOn()
-{
+void makeAWishLedOn() {
   if (isWishLedOn == false)
   {
     Serial.println("makeAWishLedOn");

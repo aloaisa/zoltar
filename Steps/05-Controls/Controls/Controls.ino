@@ -30,7 +30,7 @@ void setup()
 
 void initializePins()
 {
-  pinMode(DETECT_COIN_PIN, INPUT);
+  pinMode(DETECT_COIN_PIN, INPUT_PULLUP);
   pinMode(ENABLE_COIN_MACHINE_PIN, OUTPUT);
 
   pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
