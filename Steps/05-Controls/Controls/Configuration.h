@@ -23,12 +23,12 @@ const int ENABLE_COIN_MACHINE_PIN = 7;
 
 const int NANO_PIN = 9;
 
-const int CONTROLS_VERTICAL_DT_PIN = 18;  // Antes pin 22 cambiado por interrupciones;
-const int CONTROLS_VERTICAL_CLK_PIN = 19; // Antes pin 23 cambiado por interrupciones;
+const int CONTROLS_VERTICAL_DT_PIN = 22;
+const int CONTROLS_VERTICAL_CLK_PIN = 23;
 const int SERVO_VERTICAL_PIN = 24;
 
-const int CONTROLS_HORIZONTAL_DT_PIN = 20;  // Antes pin 25 cambiado por interrupciones;
-const int CONTROLS_HORIZONTAL_CLK_PIN = 21; // Antes pin 26 cambiado por interrupciones;
+const int CONTROLS_HORIZONTAL_DT_PIN = 25;
+const int CONTROLS_HORIZONTAL_CLK_PIN = 26;
 const int SERVO_HORIZONTAL_PIN = 27;
 
 const int SOLENOID_PIN = 31;

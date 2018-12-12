@@ -10,11 +10,9 @@ boolean isStatusInit = false;
 DFRobotDFPlayerMini musicDFPlayer;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
 
-void initMusicConfiguration()
-{
+void initMusicConfiguration() {
   musicSoftwareSerial.begin(BAUDS);
-  if (!musicDFPlayer.begin(musicSoftwareSerial))
-  {
+  if (!musicDFPlayer.begin(musicSoftwareSerial)) {
     while (true)
       ;
   }
@@ -22,20 +20,18 @@ void initMusicConfiguration()
   musicDFPlayer.volume(MUSIC_VOLUME);
 }
 
-void playMusic()
-{
+void playMusic() {
   musicDFPlayer.play(1);
 }
 
-int statusInit(int status)
-{
-  if (isStatusInit == false)
-  {
+int statusInit(int status) {
+  if (isStatusInit == false) {
     Serial.println("STATUS_INIT...");
     Serial.println("Play Music...");
     playMusic();
 
     isStatusInit = true;
+
     status = STATUS_ACTIVATE_GAME;
   }
 

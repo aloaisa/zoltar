@@ -9,8 +9,7 @@
 
 int status;
 
-void setup()
-{
+void setup() {
   Serial.println("00000000");
   Serial.begin(BAUDS);
 
@@ -25,11 +24,11 @@ void setup()
   Serial.println("INIT GAME...");
 
   // Set initial status
-  status = STATUS_STAND_BY;
+  // status = STATUS_STAND_BY;
+  status = STATUS_ACTIVATE_GAME;
 }
 
-void initializePins()
-{
+void initializePins() {
   pinMode(DETECT_COIN_PIN, INPUT_PULLUP);
   pinMode(ENABLE_COIN_MACHINE_PIN, OUTPUT);
 
@@ -39,21 +38,19 @@ void initializePins()
 
   pinMode(NANO_PIN, OUTPUT);
 
-  pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT_PULLUP);
-  pinMode(CONTROLS_VERTICAL_CLK_PIN, INPUT_PULLUP);
-  pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT_PULLUP);
-  pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT_PULLUP);
+  pinMode(CONTROLS_VERTICAL_DT_PIN, INPUT);
+  pinMode(CONTROLS_VERTICAL_CLK_PIN, INPUT);
+  pinMode(CONTROLS_HORIZONTAL_DT_PIN, INPUT);
+  pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT);
 
   pinMode(SOLENOID_PIN, OUTPUT);
 }
 
-void loop()
-{
+void loop() {
 
   //printStatus();
 
-  switch (status)
-  {
+  switch (status) {
   case STATUS_INIT:
     status = statusInit(status);
     break;
@@ -73,23 +70,21 @@ void loop()
   }
 }
 
-void printStatus()
-{
+void printStatus() {
   String statusText = "STAND_BY";
 
-  switch (status)
-  {
-  case STATUS_INIT:
-    statusText = "INIT";
-    break;
+  switch (status) {
+    case STATUS_INIT:
+      statusText = "INIT";
+      break;
 
-  case STATUS_ACTIVATE_GAME:
-    statusText = "ACTIVATE_GAME";
-    break;
+    case STATUS_ACTIVATE_GAME:
+      statusText = "ACTIVATE_GAME";
+      break;
 
-  default:
-    statusText = "STAND_BY";
-    break;
+    default:
+      statusText = "STAND_BY";
+      break;
   }
 
   unsigned long timeLoop = millis();
