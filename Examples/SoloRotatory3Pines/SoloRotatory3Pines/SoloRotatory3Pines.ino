@@ -8,9 +8,9 @@ boolean goStop = 0;
 int lastMovement = 0;
 
 void setup() {
-  pinMode(encoderPinA, INPUT);
-  pinMode(encoderPinB, INPUT);
-  
+  pinMode(encoderPinA, INPUT_PULLUP);
+  pinMode(encoderPinB, INPUT_PULLUP);
+
   digitalWrite(encoderPinA, HIGH);
   digitalWrite(encoderPinB, HIGH);
 
