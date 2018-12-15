@@ -6,26 +6,45 @@
 #include "StatusStandBy.h"
 #include "StatusInit.h"
 #include "StatusActivateGame.h"
+#include "StatusWaittingReleaseCoin.h"
+#include "StatusWinOrLost.h"
+#include "StatusWin.h"
+#include "StatusLost.h"
 
 int status;
 
 void setup() {
-  Serial.println("00000000");
   Serial.begin(BAUDS);
 
   Serial.println("Initialize pins");
   initializePins();
+
   Serial.println("init Stand By...");
   statusInit_StandBy();
+
   Serial.println("Init music configuration");
   initMusicConfiguration();
+
   Serial.println("Init Activate Game");
   statusActivateGame_init();
+
+  Serial.println("Init Waiting release coin");
+  statusWaittingReleaseCoin_Reset();
+
+  Serial.println("Init Win or lost");
+  statusWinOrLost_Reset();
+
+  Serial.println("Init Win");
+  initStatusWin();
+
+  Serial.println("Init Win");
+  initStatusLost();
+
   Serial.println("INIT GAME...");
+  Serial.println("Insert coin: ");
 
   // Set initial status
-  // status = STATUS_STAND_BY;
-  status = STATUS_ACTIVATE_GAME;
+  status = STATUS_STAND_BY;
 }
 
 void initializePins() {
@@ -44,6 +63,18 @@ void initializePins() {
   pinMode(CONTROLS_HORIZONTAL_CLK_PIN, INPUT);
 
   pinMode(SOLENOID_PIN, OUTPUT);
+
+  pinMode(FREE_COIN_BUTTON_PIN, INPUT_PULLUP);
+
+  pinMode(MOTOR_ENABLE_PIN, OUTPUT);
+
+  pinMode(MOTOR_WIN_STEP_PIN, OUTPUT);
+  pinMode(MOTOR_WIN_DIR_PIN, OUTPUT);
+  pinMode(SWITCH_WIN_CARD_MOTOR_PIN, INPUT);
+
+  pinMode(MOTOR_LOST_STEP_PIN, OUTPUT);
+  pinMode(MOTOR_LOST_DIR_PIN, OUTPUT);
+  pinMode(SWITCH_LOST_CARD_MOTOR_PIN, INPUT);
 }
 
 void loop() {
@@ -60,14 +91,45 @@ void loop() {
     break;
 
   case STATUS_WAITING_RELEASE_COIN:
-    nano_Off();
-    status = STATUS_STAND_BY;
+    status = statusWaittingReleaseCoin(status);
+    break;
+
+  case STATUS_WIN_OR_LOST:
+    status = statusWinOrLost(status);
+    break;
+
+  case STATUS_WIN:
+    status = statusWin(status);
+    break;
+
+  case STATUS_LOST:
+    status = statusLost(status);
+    break;
+
+  case STATUS_OFF:
+    status = statusOff(status);
     break;
 
   default: //case "STATUS_STAND_BY":
     status = statusStandBy(status);
     break;
   }
+}
+
+int statusOff(int status) {
+  nano_Off();
+
+  statusInit_StandBy();
+  statusInit_Reset();
+  statusActivateGame_Reset();
+  statusWaittingReleaseCoin_Reset();
+  statusWinOrLost_Reset();
+
+  status = STATUS_STAND_BY;
+
+  Serial.println("Insert coin: ");
+
+  return status;
 }
 
 void printStatus() {
@@ -82,11 +144,31 @@ void printStatus() {
       statusText = "ACTIVATE_GAME";
       break;
 
+    case STATUS_WAITING_RELEASE_COIN:
+      statusText = "WAITING_RELEASE_COIN";
+      break;
+
+    case STATUS_WIN_OR_LOST:
+      statusText = "WIN_OR_LOST";
+      break;
+
+    case STATUS_WIN:
+      statusText = "WIN";
+      break;
+
+    case STATUS_LOST:
+      statusText = "LOST";
+      break;
+
+    case STATUS_OFF:
+      statusText = "OFF";
+      break;
+
     default:
       statusText = "STAND_BY";
       break;
-  }
+    }
 
-  unsigned long timeLoop = millis();
-  Serial.println("STATUS :" + statusText + " - " + timeLoop);
+    unsigned long timeLoop = millis();
+    Serial.println("STATUS :" + statusText + " - " + timeLoop);
 }

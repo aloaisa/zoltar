@@ -23,9 +23,6 @@ Servo horizontalServo;
 boolean controlsActive;
 int verticalPos, horizontalPos;
 int lastVerticalPos, lastHorizontalPos;
-int clkLastVerticalSignal, clkLastVerticalSignal2;
-int clkLastHorizontalSignal, clkLastHorizontalSignal2;
-
 boolean verticalALast;
 boolean verticalBLast;
 boolean horizontalALast;
@@ -78,6 +75,10 @@ void pointToMouthLedOn() {
   digitalWrite(POINT_TO_MOUTH_LED_PIN, HIGH);
 }
 
+void pointToMouthLedOff() {
+  digitalWrite(POINT_TO_MOUTH_LED_PIN, LOW);
+}
+
 void makeAWishLedOn() {
   if (isWishLedOn == false)
   {
@@ -87,9 +88,18 @@ void makeAWishLedOn() {
   }
 }
 
+void makeAWishLedOff() {
+  digitalWrite(MAKE_WISH_LED_PIN, LOW);
+  isWishLedOn = false;
+}
+
 void pushButtonCoinLedOn() {
   Serial.println("pushButtonCoinLedOn");
   digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH);
+}
+
+void pushButtonCoinLedOff() {
+  digitalWrite(PUSH_BUTTON_COIN_LED_PIN, LOW);
 }
 
 void playSound() {
@@ -159,8 +169,8 @@ void moveVerticalControl() {
           lastVerticalPos = nextStep;
         } else {
           verticalPos = verticalPos + nextStep;
-          Serial.print("verticalPos: ");
-          Serial.println(verticalPos);
+          // Serial.print("verticalPos: ");
+          // Serial.println(verticalPos);
           goStopVertical = 0;
         }
       }
@@ -227,8 +237,8 @@ void moveHorizonalControl() {
           lastHorizontalPos = nextStep;
         } else {
           horizontalPos = horizontalPos + nextStep;
-          Serial.print("horizontalPos: ");
-          Serial.println(horizontalPos);
+          // Serial.print("horizontalPos: ");
+          // Serial.println(horizontalPos);
           goStopHorizontal = 0;
         }
       }
@@ -259,10 +269,12 @@ int statusActivateGame(int status) {
   
   if (isStatusActivateGame == false) {
     Serial.println("STATUS_ACTIVATE_GAME...");
-    Serial.println("Play Sound...");
-    playSound();
     Serial.println("Point to mouth led ON...");
     pointToMouthLedOn();
+    
+    Serial.println("Play Sound...");
+    playSound();
+    
     Serial.println("Activate controll...");
     activateControls();
 
@@ -276,7 +288,6 @@ int statusActivateGame(int status) {
 
   if (finishTime <= millis()) {
     pushButtonCoinLedOn();
-
     controlsActive = false;
     status = STATUS_WAITING_RELEASE_COIN;
   }
@@ -286,4 +297,15 @@ int statusActivateGame(int status) {
   }
 
   return status;
+}
+
+void statusActivateGame_Reset()
+{
+  isStatusActivateGame = false;
+  makeAWishLedOff();
+  pushButtonCoinLedOff();
+  pointToMouthLedOff();
+
+  // Move servos to 0 position
+  initServoConfiguration();
 }

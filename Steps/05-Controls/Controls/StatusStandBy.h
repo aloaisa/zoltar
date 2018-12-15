@@ -19,12 +19,10 @@ void nano_On() {
 
 int statusStandBy(int status) {
   int inputCoin = digitalRead(DETECT_COIN_PIN);
-  Serial.println("coin: " + inputCoin);
 
   if (inputCoin == HIGH) {
     status = STATUS_INIT;
-    nano_On();
-
+    delay(500);
     digitalWrite(ENABLE_COIN_MACHINE_PIN, LOW);
   }
 

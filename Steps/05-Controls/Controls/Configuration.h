@@ -27,6 +27,8 @@ const int ENABLE_COIN_MACHINE_PIN = 7;
 
 const int NANO_PIN = 9;
 
+const int SENSOR_WIN_PIN = 21; // PIN With interruption
+
 const int CONTROLS_VERTICAL_DT_PIN = 22;
 const int CONTROLS_VERTICAL_CLK_PIN = 23;
 const int SERVO_VERTICAL_PIN = 24;
@@ -37,8 +39,6 @@ const int SERVO_HORIZONTAL_PIN = 27;
 
 const int SOLENOID_PIN = 31;
 const int FREE_COIN_BUTTON_PIN = 33;
-
-const int SENSOR_WIN_PIN = 35;
 
 const int MOTOR_ENABLE_PIN = 39;
 const int MOTOR_WIN_STEP_PIN = 41;

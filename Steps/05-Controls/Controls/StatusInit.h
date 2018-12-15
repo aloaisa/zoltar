@@ -24,11 +24,24 @@ void playMusic() {
   musicDFPlayer.play(1);
 }
 
+void playEyesSound() {
+  musicDFPlayer.play(2);
+}
+
 int statusInit(int status) {
   if (isStatusInit == false) {
     Serial.println("STATUS_INIT...");
+    
+    Serial.println("Init nano...");
+    nano_On();
+
+    Serial.println("Play Chispas sound...");
+    playEyesSound(); // En el nano se encienden los ojos a la vez
+    delay(1000);
+
     Serial.println("Play Music...");
-    playMusic();
+    playMusic(); // La cebeza se debe mover en el nano a la vez.
+    delay(2000);
 
     isStatusInit = true;
 
@@ -36,4 +49,9 @@ int statusInit(int status) {
   }
 
   return status;
+}
+
+void statusInit_Reset()
+{
+  isStatusInit = false;
 }

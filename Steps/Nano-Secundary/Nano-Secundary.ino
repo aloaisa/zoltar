@@ -48,8 +48,23 @@ void setup()
 }
 
 void initializeGame() {
+  Serial.println("Play Sound chispas...");
+  
   Serial.println("Eyes leds on...");
   digitalWrite(EYES_LED_PIN, HIGH);
+  delay(100);
+  digitalWrite(EYES_LED_PIN, LOW);
+  delay(150);
+  digitalWrite(EYES_LED_PIN, HIGH);
+  delay(150);
+  digitalWrite(EYES_LED_PIN, LOW);
+  delay(100);
+  digitalWrite(EYES_LED_PIN, HIGH);
+  delay(50);
+  digitalWrite(EYES_LED_PIN, LOW);
+  delay(150);
+  digitalWrite(EYES_LED_PIN, HIGH);
+  delay(250);
 
   finishTime = millis() + GAME_TIME;
 }
