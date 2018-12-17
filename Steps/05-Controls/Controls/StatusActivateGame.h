@@ -85,6 +85,8 @@ void makeAWishLedOn() {
     Serial.println("makeAWishLedOn");
     isWishLedOn = true;
     digitalWrite(MAKE_WISH_LED_PIN, HIGH);
+
+    soundDFPlayer.play(2);
   }
 }
 
@@ -96,6 +98,8 @@ void makeAWishLedOff() {
 void pushButtonCoinLedOn() {
   Serial.println("pushButtonCoinLedOn");
   digitalWrite(PUSH_BUTTON_COIN_LED_PIN, HIGH);
+
+  soundDFPlayer.play(3);
 }
 
 void pushButtonCoinLedOff() {
@@ -105,6 +109,7 @@ void pushButtonCoinLedOff() {
 void playSound() {
   soundDFPlayer.play(1);
 }
+
 
 void activateControls() {
   verticalPos = INIT_SERVO_VERTICAL_POSITION;
