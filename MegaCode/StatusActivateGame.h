@@ -1,15 +1,3 @@
-/**
-
- * On leds "Point to the mouth" - 1 digital input
- * On sound - 2 Digital-analogical inputs
- * On controls - 2 Analagical inputs
- * Activate under the controls 2 servos (x, y) - 2 digital inputs
- * Wait a time to user play game moving the controls.
- * Disable controls
- * On leds "Press the button"
- * Activate next status
- */
-
 DFRobotDFPlayerMini soundDFPlayer;
 SoftwareSerial soundSoftwareSerial(SOUND_RX_PIN, SOUND_TX_PIN); // RX, TX
 
@@ -29,9 +17,6 @@ boolean horizontalALast;
 boolean horizontalBLast;
 boolean goStopVertical;
 boolean goStopHorizontal;
-
-int incrementoVertical = 0;
-int incrementoHorizontal = 0;
 
 void initSoundConfiguration() {
   Serial.println("Init sound configuration...");
@@ -79,20 +64,18 @@ void pointToMouthLedOff() {
   digitalWrite(POINT_TO_MOUTH_LED_PIN, LOW);
 }
 
+void playActivateGameSound() {
+  soundDFPlayer.play(1);
+}
+
 void makeAWishLedOn() {
-  if (isWishLedOn == false)
-  {
+  if (isWishLedOn == false) {
     Serial.println("makeAWishLedOn");
     isWishLedOn = true;
     digitalWrite(MAKE_WISH_LED_PIN, HIGH);
 
     soundDFPlayer.play(2);
   }
-}
-
-void makeAWishLedOff() {
-  digitalWrite(MAKE_WISH_LED_PIN, LOW);
-  isWishLedOn = false;
 }
 
 void pushButtonCoinLedOn() {
@@ -102,14 +85,42 @@ void pushButtonCoinLedOn() {
   soundDFPlayer.play(3);
 }
 
+void playWinSound() {
+  soundDFPlayer.play(4);
+}
+
+void playFreeSelenoidSound() {
+  soundDFPlayer.play(5);
+}
+
+void playStartZoltarSound() {
+  soundDFPlayer.play(6);
+}
+
+void playRefillCardSound() {
+  soundDFPlayer.play(7);
+}
+
+void playButtonPulsedSound() {
+  soundDFPlayer.play(8);
+}
+
+void playWinCard() {
+  soundDFPlayer.play(9);
+}
+
+void playLostCard() {
+  soundDFPlayer.play(10);
+}
+
+void makeAWishLedOff() {
+  digitalWrite(MAKE_WISH_LED_PIN, LOW);
+  isWishLedOn = false;
+}
+
 void pushButtonCoinLedOff() {
   digitalWrite(PUSH_BUTTON_COIN_LED_PIN, LOW);
 }
-
-void playSound() {
-  soundDFPlayer.play(1);
-}
-
 
 void activateControls() {
   verticalPos = INIT_SERVO_VERTICAL_POSITION;
@@ -174,8 +185,6 @@ void moveVerticalControl() {
           lastVerticalPos = nextStep;
         } else {
           verticalPos = verticalPos + nextStep;
-          // Serial.print("verticalPos: ");
-          // Serial.println(verticalPos);
           goStopVertical = 0;
         }
       }
@@ -242,8 +251,6 @@ void moveHorizonalControl() {
           lastHorizontalPos = nextStep;
         } else {
           horizontalPos = horizontalPos + nextStep;
-          // Serial.print("horizontalPos: ");
-          // Serial.println(horizontalPos);
           goStopHorizontal = 0;
         }
       }
@@ -278,7 +285,7 @@ int statusActivateGame(int status) {
     pointToMouthLedOn();
     
     Serial.println("Play Sound...");
-    playSound();
+    playActivateGameSound();
     
     Serial.println("Activate controll...");
     activateControls();
@@ -304,8 +311,7 @@ int statusActivateGame(int status) {
   return status;
 }
 
-void statusActivateGame_Reset()
-{
+void statusActivateGame_Reset() {
   isStatusActivateGame = false;
   makeAWishLedOff();
   pushButtonCoinLedOff();

@@ -1,8 +1,3 @@
-/**
- * Status Win:
- * Move motor with win cards
- * Stop motor when switch sensor ON and OFF again.
- */
 String lastWinPosition;
 
 void initStatusWin() {
@@ -33,6 +28,8 @@ int statusWin(int status) {
   lastWinPosition = "OFF";
   digitalWrite(MOTOR_ENABLE_PIN, LOW);
 
+  playWinCard();
+  
   while (moveWinCardMotor() == true) {
     Serial.println("Moving motor win cards...");
 

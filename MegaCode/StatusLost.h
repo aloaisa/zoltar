@@ -1,8 +1,3 @@
-/**
- * Status Lost:
- * Move motor with lost cards
- * Stop motor when switch sensor ON and OFF again.
- */
 String lastLostPosition;
 
 void initStatusLost() {
@@ -33,6 +28,8 @@ int statusLost(int status) {
   lastLostPosition = "OFF";
   digitalWrite(MOTOR_ENABLE_PIN, LOW);
 
+  playLostCard();
+  
   while (moveLostCardMotor() == true) {
     Serial.println("Moving motor lost cards...");
 

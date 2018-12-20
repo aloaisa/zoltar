@@ -45,6 +45,8 @@ void setup() {
 
   // Set initial status
   status = STATUS_STAND_BY;
+
+  playStartZoltarSound();
 }
 
 void initializePins() {
@@ -77,9 +79,23 @@ void initializePins() {
   pinMode(SWITCH_LOST_CARD_MOTOR_PIN, INPUT);
 }
 
-void loop() {
+int statusOff(int status) {
+  nano_Off();
 
-  //printStatus();
+  statusInit_StandBy();
+  statusInit_Reset();
+  statusActivateGame_Reset();
+  statusWaittingReleaseCoin_Reset();
+  statusWinOrLost_Reset();
+
+  status = STATUS_STAND_BY;
+
+  Serial.println("Insert coin: ");
+
+  return status;
+}
+
+void loop() {
 
   switch (status) {
   case STATUS_INIT:
@@ -114,61 +130,4 @@ void loop() {
     status = statusStandBy(status);
     break;
   }
-}
-
-int statusOff(int status) {
-  nano_Off();
-
-  statusInit_StandBy();
-  statusInit_Reset();
-  statusActivateGame_Reset();
-  statusWaittingReleaseCoin_Reset();
-  statusWinOrLost_Reset();
-
-  status = STATUS_STAND_BY;
-
-  Serial.println("Insert coin: ");
-
-  return status;
-}
-
-void printStatus() {
-  String statusText = "STAND_BY";
-
-  switch (status) {
-    case STATUS_INIT:
-      statusText = "INIT";
-      break;
-
-    case STATUS_ACTIVATE_GAME:
-      statusText = "ACTIVATE_GAME";
-      break;
-
-    case STATUS_WAITING_RELEASE_COIN:
-      statusText = "WAITING_RELEASE_COIN";
-      break;
-
-    case STATUS_WIN_OR_LOST:
-      statusText = "WIN_OR_LOST";
-      break;
-
-    case STATUS_WIN:
-      statusText = "WIN";
-      break;
-
-    case STATUS_LOST:
-      statusText = "LOST";
-      break;
-
-    case STATUS_OFF:
-      statusText = "OFF";
-      break;
-
-    default:
-      statusText = "STAND_BY";
-      break;
-    }
-
-    unsigned long timeLoop = millis();
-    Serial.println("STATUS :" + statusText + " - " + timeLoop);
 }

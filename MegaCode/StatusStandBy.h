@@ -1,9 +1,3 @@
-/**
- * Stand by:
- * When the game is waiting to start the game.
- * Check if the coin enter - 1 digital input
- * When coin in, then start game.
- */
 void nano_Off() {
   digitalWrite(NANO_PIN, LOW);
 }
@@ -22,7 +16,7 @@ int statusStandBy(int status) {
 
   if (inputCoin == HIGH) {
     status = STATUS_INIT;
-    delay(500);
+    delay(TIME_BETWEEN_INSERT_COIN_AND_START_INIT_GAME);
     digitalWrite(ENABLE_COIN_MACHINE_PIN, LOW);
   }
 

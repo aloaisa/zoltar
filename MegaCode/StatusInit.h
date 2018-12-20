@@ -1,10 +1,3 @@
-/**
- * Init status:
- * only run one time per game.
- * Play background music - 2 Digital-analogical inputs
- * On background leds - 1 digital input
- * And wait a defined time to start the game
- */
 boolean isStatusInit = false;
 
 DFRobotDFPlayerMini musicDFPlayer;
@@ -35,13 +28,13 @@ int statusInit(int status) {
     Serial.println("Init nano...");
     nano_On();
 
-    Serial.println("Play Chispas sound...");
-    playEyesSound(); // En el nano se encienden los ojos a la vez
-    delay(1000);
+    Serial.println("Play eyes on sound...");
+    playEyesSound();
+    delay(TIME_BETWEEN_EYES_SOUND_AND_PLAY_MUSIC);
 
     Serial.println("Play Music...");
-    playMusic(); // La cebeza se debe mover en el nano a la vez.
-    delay(2000);
+    playMusic();
+    delay(TIME_BETWEEN_PLAY_MUSIC_AND_START_GAME);
 
     isStatusInit = true;
 
@@ -51,7 +44,6 @@ int statusInit(int status) {
   return status;
 }
 
-void statusInit_Reset()
-{
+void statusInit_Reset() {
   isStatusInit = false;
 }

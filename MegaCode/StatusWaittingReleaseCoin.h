@@ -1,63 +1,43 @@
-/**
- * Waitting release coin status
- *  Wait time to release the coin with the selenoid
- *  If the button to free the coin it's pressed the selenoid is activated and free
- *  the coin. Continue with the next status.
- *  If the time pass and the button has not pressed, the coin it's free too.
- */
 boolean isStatusWaittingActivateGame = false;
 unsigned long waittingFinishTime;
 
-void freeCoin()
-{
+void freeCoin() {
   digitalWrite(SOLENOID_PIN, HIGH);
 }
 
-void statusWaittingReleaseCoin_Reset()
-{
+void statusWaittingReleaseCoin_Reset() {
   isStatusWaittingActivateGame = false;
   digitalWrite(SOLENOID_PIN, LOW);
 }
 
-boolean isButtonPressed()
-{
+boolean isButtonPressed() {
   int inputCoin = digitalRead(FREE_COIN_BUTTON_PIN);
-  if (inputCoin == LOW)
-  {
-    return true;
-  }
-
-  return false;
+  return inputCoin == LOW;
 }
 
-int freeCoinIfGotIt(int status)
-{
-  if (isButtonPressed() == true)
-  {
+int freeCoinIfGotIt(int status) {
+  if (isButtonPressed() == true) {
     Serial.println("Press free coin buton!");
     freeCoin();
+    playButtonPulsedSound();
     status = STATUS_WIN_OR_LOST;
   }
 
-  if (waittingFinishTime < millis())
-  {
+  if (waittingFinishTime < millis()) {
     Serial.println("Finish free coin max time!");
     freeCoin();
+    playFreeSelenoidSound();
     status = STATUS_WIN_OR_LOST;
   }
 
   return status;
 }
 
-int statusWaittingReleaseCoin(int status)
-{
-  if (isStatusWaittingActivateGame == false)
-  {
+int statusWaittingReleaseCoin(int status) {
+  if (isStatusWaittingActivateGame == false) {
     waittingFinishTime = millis() + FREE_COIN_TIME;
     isStatusWaittingActivateGame = true;
-  }
-  else
-  {
+  } else {
     status = freeCoinIfGotIt(status);
   }
 

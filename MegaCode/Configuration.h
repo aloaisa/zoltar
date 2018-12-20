@@ -77,6 +77,10 @@ const int MOTOR_STEP_VELOCITY_DELAY = 50;
 
 const int GAME_TOTAL_TIME_FINISH = 10000;
 
+const int TIME_BETWEEN_INSERT_COIN_AND_START_INIT_GAME = 500;
+const int TIME_BETWEEN_EYES_SOUND_AND_PLAY_MUSIC = 1000;
+const int TIME_BETWEEN_PLAY_MUSIC_AND_START_GAME = 2000;
+
 ///////////////////////////
 // CONTROLS SERVO LIMITS //
 ///////////////////////////

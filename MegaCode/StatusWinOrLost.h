@@ -1,9 +1,3 @@
-/**
- * Status win or lost:
- * Wait a time checking the swith win and lost.
- * If sensor win ON then STATUS_WIN
- * If lostTime pass and no detect nothing then STATUS_LOST
- */
 boolean isWinOrLostActivate = false;
 unsigned long lostTime;
 int internalStatus;
@@ -19,6 +13,8 @@ boolean isLost() {
 void winInterrup() {
   internalStatus = STATUS_WIN;
   detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
+
+  playWinSound();
 }
 
 int statusWinOrLost(int status) {
