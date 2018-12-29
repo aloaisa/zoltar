@@ -50,6 +50,16 @@ void initServoConfiguration() {
   delay(1000);
 }
 
+void disableServos() {
+  verticalServo.detach();
+  horizontalServo.detach();
+}
+
+void enableServos() {
+  verticalServo.attach(SERVO_VERTICAL_PIN);
+  horizontalServo.attach(SERVO_HORIZONTAL_PIN);
+}
+
 void statusActivateGame_init() {
   initSoundConfiguration();
   initServoConfiguration();
@@ -282,11 +292,15 @@ int statusActivateGame(int status) {
   if (isStatusActivateGame == false) {
     Serial.println("STATUS_ACTIVATE_GAME...");
     Serial.println("Point to mouth led ON...");
+    disableServos();
+
     pointToMouthLedOn();
     
     Serial.println("Play Sound...");
     playActivateGameSound();
-    
+
+    enableServos();
+        
     Serial.println("Activate controll...");
     activateControls();
 
@@ -295,10 +309,13 @@ int statusActivateGame(int status) {
   }
 
   if ((finishTime - MAKE_WITH_WAIT_TIME) <= millis()) {
+    disableServos();
     makeAWishLedOn();
+    enableServos();
   }
 
   if (finishTime <= millis()) {
+    disableServos();
     pushButtonCoinLedOn();
     controlsActive = false;
     status = STATUS_WAITING_RELEASE_COIN;

@@ -1,4 +1,4 @@
-boolean isWinOrLostActivate = false;
+boolean isWinOrLostActivate;
 unsigned long lostTime;
 int internalStatus;
 
@@ -27,6 +27,7 @@ int statusWinOrLost(int status) {
   }
 
   if (isLost() == true) {
+    detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
     return STATUS_LOST;
   }
 

@@ -4,8 +4,8 @@
 #include "Servo.h"
 #include "Configuration.h"
 #include "StatusStandBy.h"
-#include "StatusInit.h"
 #include "StatusActivateGame.h"
+#include "StatusInit.h"
 #include "StatusWaittingReleaseCoin.h"
 #include "StatusWinOrLost.h"
 #include "StatusWin.h"
@@ -77,9 +77,18 @@ void initializePins() {
   pinMode(MOTOR_LOST_STEP_PIN, OUTPUT);
   pinMode(MOTOR_LOST_DIR_PIN, OUTPUT);
   pinMode(SWITCH_LOST_CARD_MOTOR_PIN, INPUT);
+
+  pinMode(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN, INPUT);
+  pinMode(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN, INPUT);
 }
 
 int statusOff(int status) {
+
+  // WAIT UNTIL MUSIC FINISH
+  while (off_nano_time > millis()) {
+    delay(500);
+  } 
+
   nano_Off();
 
   statusInit_StandBy();
@@ -87,6 +96,8 @@ int statusOff(int status) {
   statusActivateGame_Reset();
   statusWaittingReleaseCoin_Reset();
   statusWinOrLost_Reset();
+  initStatusWin();
+  initStatusLost();
 
   status = STATUS_STAND_BY;
 

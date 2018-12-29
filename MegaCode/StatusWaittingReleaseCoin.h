@@ -1,4 +1,4 @@
-boolean isStatusWaittingActivateGame = false;
+boolean isStatusWaittingActivateGame;
 unsigned long waittingFinishTime;
 
 void freeCoin() {

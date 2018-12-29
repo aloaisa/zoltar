@@ -69,8 +69,7 @@ void initializeGame() {
   finishTime = millis() + GAME_TIME;
 }
 
-boolean isRunningGame()
-{
+boolean isRunningGame() {
   int activateSignal = digitalRead(ON_PIN);
   if (activateSignal == HIGH) {
     
@@ -91,26 +90,21 @@ boolean isRunningGame()
   return runningGame;
 }
 
-void loop()
-{
-  if (isRunningGame())
-  {
+void loop() {
+  if (isRunningGame()) {
     moveHead();
   }
 }
 
-void moveHead()
-{
+void moveHead() {
   servoHeadPosition = servoHeadPosition + servoDirection;
 
-  if (servoHeadPosition > INIT_HEAD_SERVO_POSITION)
-  {
+  if (servoHeadPosition > INIT_HEAD_SERVO_POSITION) {
     servoHeadPosition = INIT_HEAD_SERVO_POSITION;
     servoDirection = -STEP_HEAD_SERVO_POSITION;
   }
 
-  if (servoHeadPosition < MAX_HEAD_SERVO_POSITION)
-  {
+  if (servoHeadPosition < MAX_HEAD_SERVO_POSITION) {
     servoHeadPosition = MAX_HEAD_SERVO_POSITION;
     servoDirection = STEP_HEAD_SERVO_POSITION;
   }

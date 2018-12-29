@@ -49,6 +49,9 @@ const int MOTOR_LOST_STEP_PIN = 40;
 const int MOTOR_LOST_DIR_PIN = 42;
 const int SWITCH_LOST_CARD_MOTOR_PIN = 44;
 
+const int SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN = 45;
+const int SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN = 46;
+
 /////////////////////
 // MUSIC AND SOUND //
 /////////////////////
@@ -63,13 +66,16 @@ const int SOUND_VOLUME = 30; //Set volume value. From 0 to 30
 ///////////
 // TIMES //
 ///////////
+const int TOTAL_MUSIC_TIME = 56000;
+const int EASTER_EGG_TIME = 50000;
+
 const int DELAY_AFTER_STATUS_INIT = 2000;
 const int DELAY_AFTER_INSERT_COIN = 3000;
 
 const int POINT_TO_MOUTH_WAIT_TIME = 25000;
 const int MAKE_WITH_WAIT_TIME = 5000;
 
-const int FREE_COIN_TIME = 10000;
+const int FREE_COIN_TIME = 20000;
 
 const int WAIT_LOST_TIME = 5000;
 
