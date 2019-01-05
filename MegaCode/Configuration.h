@@ -20,6 +20,7 @@ const int STATUS_OFF = 6;
 // PINS     //
 //////////////
 const int MAKE_WISH_LED_PIN = 2;
+const int RESET_PIN = 3;
 const int POINT_TO_MOUTH_LED_PIN = 4;
 const int PUSH_BUTTON_COIN_LED_PIN = 5;
 const int DETECT_COIN_PIN = 6;
@@ -66,7 +67,7 @@ const int SOUND_VOLUME = 30; //Set volume value. From 0 to 30
 ///////////
 // TIMES //
 ///////////
-const int TOTAL_MUSIC_TIME = 56000;
+const unsigned long TOTAL_MUSIC_TIME = 54000;
 const int EASTER_EGG_TIME = 50000;
 
 const int DELAY_AFTER_STATUS_INIT = 2000;

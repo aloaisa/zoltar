@@ -104,7 +104,8 @@ void playFreeSelenoidSound() {
 }
 
 void playStartZoltarSound() {
-  soundDFPlayer.play(6);
+  //soundDFPlayer.play(6);
+  soundDFPlayer.play(8);
 }
 
 void playRefillCardSound() {
@@ -292,14 +293,14 @@ int statusActivateGame(int status) {
   if (isStatusActivateGame == false) {
     Serial.println("STATUS_ACTIVATE_GAME...");
     Serial.println("Point to mouth led ON...");
-    disableServos();
+    //disableServos();
 
     pointToMouthLedOn();
     
     Serial.println("Play Sound...");
     playActivateGameSound();
 
-    enableServos();
+    //enableServos();
         
     Serial.println("Activate controll...");
     activateControls();
@@ -309,13 +310,13 @@ int statusActivateGame(int status) {
   }
 
   if ((finishTime - MAKE_WITH_WAIT_TIME) <= millis()) {
-    disableServos();
+    //disableServos();
     makeAWishLedOn();
-    enableServos();
+    //enableServos();
   }
 
   if (finishTime <= millis()) {
-    disableServos();
+    //disableServos();
     pushButtonCoinLedOn();
     controlsActive = false;
     status = STATUS_WAITING_RELEASE_COIN;
@@ -335,5 +336,5 @@ void statusActivateGame_Reset() {
   pointToMouthLedOff();
 
   // Move servos to 0 position
-  initServoConfiguration();
+  // initServoConfiguration();
 }

@@ -1,5 +1,4 @@
-boolean isStatusInit = false;
-unsigned long off_nano_time;
+boolean isStatusInit;
 
 DFRobotDFPlayerMini musicDFPlayer;
 SoftwareSerial musicSoftwareSerial(MUSIC_RX_PIN, MUSIC_TX_PIN); // RX, TX
@@ -22,25 +21,9 @@ void playEyesSound() {
   musicDFPlayer.play(2);
 }
 
-boolean isLastCardsSwitchActivate() {
-  boolean result = false;
-
-  int lostCards = digitalRead(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN);
-  int winCards = digitalRead(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN);
-  if (lostCards == HIGH || winCards == HIGH) {
-    result = true;
-  }
-
-  return result;
-}
-
 int statusInit(int status) {
   if (isStatusInit == false) {
     Serial.println("STATUS_INIT...");
-    
-    if (isLastCardsSwitchActivate() == true) {
-      playRefillCardSound();
-    }
 
     Serial.println("Init nano...");
     nano_On();
@@ -52,7 +35,6 @@ int statusInit(int status) {
     Serial.println("Play Music...");
     playMusic();
 
-    off_nano_time = millis() + TOTAL_MUSIC_TIME;
     delay(TIME_BETWEEN_PLAY_MUSIC_AND_START_GAME);
 
     isStatusInit = true;

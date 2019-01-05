@@ -12,6 +12,7 @@
 #include "StatusLost.h"
 
 int status;
+unsigned long off_nano_time;
 
 void setup() {
   Serial.begin(BAUDS);
@@ -21,6 +22,9 @@ void setup() {
 
   Serial.println("init Stand By...");
   statusInit_StandBy();
+
+  Serial.println("Reset Init status...");
+  statusInit_Reset();
 
   Serial.println("Init music configuration");
   initMusicConfiguration();
@@ -53,6 +57,9 @@ void initializePins() {
   pinMode(DETECT_COIN_PIN, INPUT_PULLUP);
   pinMode(ENABLE_COIN_MACHINE_PIN, OUTPUT);
 
+  digitalWrite(RESET_PIN, HIGH);
+  pinMode(RESET_PIN, OUTPUT);
+
   pinMode(POINT_TO_MOUTH_LED_PIN, OUTPUT);
   pinMode(PUSH_BUTTON_COIN_LED_PIN, OUTPUT);
   pinMode(MAKE_WISH_LED_PIN, OUTPUT);
@@ -82,16 +89,34 @@ void initializePins() {
   pinMode(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN, INPUT);
 }
 
-int statusOff(int status) {
+boolean isLastCardsSwitchActivate() {
+  boolean result = false;
+
+  int lostCards = digitalRead(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN);
+  int winCards = digitalRead(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN);
+  if (lostCards == HIGH || winCards == HIGH) {
+    result = true;
+  }
+
+  return result;
+}
+
+void statusOff(int status) {
+
+  digitalWrite(ENABLE_COIN_MACHINE_PIN, LOW);
 
   // WAIT UNTIL MUSIC FINISH
+  Serial.print("off_nano_time: ");
+  Serial.println(off_nano_time);
+
   while (off_nano_time > millis()) {
+    Serial.print("millis(): ");
+    Serial.println(millis());
     delay(500);
-  } 
+  }
 
   nano_Off();
 
-  statusInit_StandBy();
   statusInit_Reset();
   statusActivateGame_Reset();
   statusWaittingReleaseCoin_Reset();
@@ -99,11 +124,14 @@ int statusOff(int status) {
   initStatusWin();
   initStatusLost();
 
-  status = STATUS_STAND_BY;
+  if (isLastCardsSwitchActivate() == true) {
+    Serial.println("isLastCardsSwitchActivate: true");
+    playRefillCardSound();
+  } else {
+    Serial.println("isLastCardsSwitchActivate: false");
+  }
 
-  Serial.println("Insert coin: ");
-
-  return status;
+  digitalWrite(RESET_PIN, LOW);
 }
 
 void loop() {
@@ -111,6 +139,14 @@ void loop() {
   switch (status) {
   case STATUS_INIT:
     status = statusInit(status);
+
+    if (status == STATUS_ACTIVATE_GAME) {
+      off_nano_time = millis() + TOTAL_MUSIC_TIME;
+      Serial.print("off_nano_time: ");
+      Serial.println(off_nano_time);
+      Serial.print("millis(): ");
+      Serial.println(millis());
+    }
     break;
 
   case STATUS_ACTIVATE_GAME:
@@ -134,7 +170,7 @@ void loop() {
     break;
 
   case STATUS_OFF:
-    status = statusOff(status);
+    statusOff(status);
     break;
 
   default: //case "STATUS_STAND_BY":

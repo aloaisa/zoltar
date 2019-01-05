@@ -1,6 +1,6 @@
 boolean isWinOrLostActivate;
 unsigned long lostTime;
-int internalStatus;
+volatile int internalStatus;
 
 void statusWinOrLost_Reset() {
   isWinOrLostActivate = false;
@@ -11,10 +11,8 @@ boolean isLost() {
 }
 
 void winInterrup() {
+  Serial.println("winInterrup.");
   internalStatus = STATUS_WIN;
-  detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
-
-  playWinSound();
 }
 
 int statusWinOrLost(int status) {
@@ -23,12 +21,12 @@ int statusWinOrLost(int status) {
     isWinOrLostActivate = true;
 
     internalStatus = status;
-    attachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN), winInterrup, HIGH);
+    attachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN), winInterrup, RISING);
   }
 
   if (isLost() == true) {
-    detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
-    return STATUS_LOST;
+    Serial.println("isLost.");
+    internalStatus = STATUS_LOST;
   }
 
   return internalStatus;

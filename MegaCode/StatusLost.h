@@ -2,7 +2,7 @@ String lastLostPosition;
 
 void initStatusLost() {
   digitalWrite(MOTOR_ENABLE_PIN, HIGH);
-  digitalWrite(MOTOR_LOST_DIR_PIN, LOW);
+  digitalWrite(MOTOR_LOST_DIR_PIN, HIGH);
   digitalWrite(MOTOR_LOST_STEP_PIN, LOW);
 }
 
@@ -25,9 +25,11 @@ boolean moveLostCardMotor() {
 
 int statusLost(int status) {
 
-  lastLostPosition = "OFF";
-  digitalWrite(MOTOR_ENABLE_PIN, LOW);
+  detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
 
+  lastLostPosition = "OFF";
+  digitalWrite(SOLENOID_PIN, LOW);
+  digitalWrite(MOTOR_ENABLE_PIN, LOW);
   playLostCard();
   
   while (moveLostCardMotor() == true) {

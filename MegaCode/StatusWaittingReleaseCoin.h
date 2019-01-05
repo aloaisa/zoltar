@@ -2,24 +2,31 @@ boolean isStatusWaittingActivateGame;
 unsigned long waittingFinishTime;
 
 void freeCoin() {
+  Serial.println("freeCoin.");
   digitalWrite(SOLENOID_PIN, HIGH);
+  Serial.println("freeCoin..");
 }
 
 void statusWaittingReleaseCoin_Reset() {
   isStatusWaittingActivateGame = false;
-  digitalWrite(SOLENOID_PIN, LOW);
+  // digitalWrite(SOLENOID_PIN, LOW);
 }
 
 boolean isButtonPressed() {
   int inputCoin = digitalRead(FREE_COIN_BUTTON_PIN);
-  return inputCoin == LOW;
+  boolean result = inputCoin == LOW;
+
+  Serial.print("isButtonPressed: ");
+  Serial.println(result);
+
+  return result;
 }
 
 int freeCoinIfGotIt(int status) {
   if (isButtonPressed() == true) {
     Serial.println("Press free coin buton!");
     freeCoin();
-    playButtonPulsedSound();
+    // playButtonPulsedSound();
     status = STATUS_WIN_OR_LOST;
   }
 

@@ -24,10 +24,13 @@ boolean moveWinCardMotor() {
 }
 
 int statusWin(int status) {
- 
-  lastWinPosition = "OFF";
-  digitalWrite(MOTOR_ENABLE_PIN, LOW);
 
+  detachInterrupt(digitalPinToInterrupt(SENSOR_WIN_PIN));
+  
+  lastWinPosition = "OFF";
+  digitalWrite(SOLENOID_PIN, LOW);
+  digitalWrite(MOTOR_ENABLE_PIN, LOW);
+  // playWinSound();
   playWinCard();
   
   while (moveWinCardMotor() == true) {
