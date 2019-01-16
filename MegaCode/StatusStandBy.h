@@ -5,11 +5,6 @@ void nano_Off() {
   digitalWrite(NANO_PIN, LOW);
 }
 
-void statusInit_StandBy() {
-  nano_Off();
-  digitalWrite(ENABLE_COIN_MACHINE_PIN, HIGH);
-}
-
 void nano_On() {
   digitalWrite(NANO_PIN, HIGH);
 }

@@ -28,6 +28,14 @@ const int ENABLE_COIN_MACHINE_PIN = 7;
 
 const int NANO_PIN = 9;
 
+/////////////////////
+// MUSIC AND SOUND //
+/////////////////////
+const int MUSIC_RX_PIN = 10;
+const int MUSIC_TX_PIN = 11;
+const int SOUND_RX_PIN = 12;
+const int SOUND_TX_PIN = 13;
+
 const int SENSOR_WIN_PIN = 21; // PIN With interruption
 
 const int CONTROLS_VERTICAL_DT_PIN = 22;
@@ -50,17 +58,9 @@ const int MOTOR_LOST_STEP_PIN = 40;
 const int MOTOR_LOST_DIR_PIN = 42;
 const int SWITCH_LOST_CARD_MOTOR_PIN = 44;
 
-const int SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN = 45;
-const int SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN = 46;
+const int SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN = 46;
 
-/////////////////////
-// MUSIC AND SOUND //
-/////////////////////
-const int MUSIC_RX_PIN = 10;
-const int MUSIC_TX_PIN = 11;
-const int SOUND_RX_PIN = 12;
-const int SOUND_TX_PIN = 13;
-
+//////////////
 const int MUSIC_VOLUME = 30; //Set volume value. From 0 to 30
 const int SOUND_VOLUME = 30; //Set volume value. From 0 to 30
 

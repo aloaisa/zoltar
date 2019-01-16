@@ -21,7 +21,7 @@ void setup() {
   initializePins();
 
   Serial.println("init Stand By...");
-  statusInit_StandBy();
+  nano_Off();
 
   Serial.println("Reset Init status...");
   statusInit_Reset();
@@ -45,6 +45,8 @@ void setup() {
   initStatusLost();
 
   Serial.println("INIT GAME...");
+  digitalWrite(ENABLE_COIN_MACHINE_PIN, HIGH);
+  
   Serial.println("Insert coin: ");
 
   // Set initial status
@@ -75,6 +77,8 @@ void initializePins() {
 
   pinMode(FREE_COIN_BUTTON_PIN, INPUT_PULLUP);
 
+  pinMode(SENSOR_WIN_PIN, INPUT_PULLUP);
+
   pinMode(MOTOR_ENABLE_PIN, OUTPUT);
 
   pinMode(MOTOR_WIN_STEP_PIN, OUTPUT);
@@ -85,16 +89,14 @@ void initializePins() {
   pinMode(MOTOR_LOST_DIR_PIN, OUTPUT);
   pinMode(SWITCH_LOST_CARD_MOTOR_PIN, INPUT);
 
-  pinMode(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN, INPUT);
-  pinMode(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN, INPUT);
+  pinMode(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN, INPUT_PULLUP);
 }
 
 boolean isLastCardsSwitchActivate() {
   boolean result = false;
 
   int lostCards = digitalRead(SWITCH_NEED_CARDS_LOST_CARD_MOTOR_PIN);
-  int winCards = digitalRead(SWITCH_NEED_CARDS_WIN_CARD_MOTOR_PIN);
-  if (lostCards == HIGH || winCards == HIGH) {
+  if (lostCards == HIGH) {
     result = true;
   }
 
@@ -127,6 +129,7 @@ void statusOff(int status) {
   if (isLastCardsSwitchActivate() == true) {
     Serial.println("isLastCardsSwitchActivate: true");
     playRefillCardSound();
+    delay(2000);
   } else {
     Serial.println("isLastCardsSwitchActivate: false");
   }
